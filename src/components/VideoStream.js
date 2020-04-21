@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import Box from './core/Box';
+import Box from 'components/core/Box';
 
 const Video = styled.video`
   max-width: 100vw;
 `;
 
 function VideoStream({ hd, audio }) {
+  const videoRef = useRef();
+
   const video = hd ? {
     width: {
       min: 1280,
@@ -20,8 +22,6 @@ function VideoStream({ hd, audio }) {
     video,
     audio,
   };
-
-  const videoRef = useRef();
 
   useEffect(() => {
     async function fetchData() {

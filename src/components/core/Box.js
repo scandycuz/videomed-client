@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Text from '../../util/Text';
+import Text from 'util/Text';
 
 const Styled = styled.div`
   display: flex;
