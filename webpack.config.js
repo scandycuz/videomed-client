@@ -11,6 +11,7 @@ module.exports = {
 	resolve: {
 		modules: [path.resolve(__dirname, './src'), 'node_modules'],
 	},
+	devtool: 'source-map',
 	module: {
 		rules: [
 			{

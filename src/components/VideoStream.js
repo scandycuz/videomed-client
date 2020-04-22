@@ -1,14 +1,16 @@
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Stream from 'util/Stream';
 import Box from 'components/core/Box';
 
+let stream;
+
 const Video = styled.video`
-  max-width: 100vw;
+  max-width: 100%;
 `;
 
-function VideoStream({ hd, audio }) {
-  const videoRef = useRef();
-
+function VideoStream({ token, hd, audio }) {
   const video = hd ? {
     width: {
       min: 1280,
@@ -23,18 +25,18 @@ function VideoStream({ hd, audio }) {
     audio,
   };
 
-  useEffect(() => {
-    async function fetchData() {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  const videoRef = useRef();
 
-      try {
-        videoRef.current.srcObject = stream;
-      } catch(e) {
-        console.log(e);
-      }
+  useEffect(() => {
+    async function initializeStream() {
+      stream = new Stream();
+      await stream.initialize(token, constraints);
+      stream.attachTo(videoRef.current);
+      // TEMP
+      console.log(stream);
     }
 
-    fetchData();
+    initializeStream();
   }, []);
 
   return (
@@ -50,6 +52,12 @@ function VideoStream({ hd, audio }) {
 VideoStream.defaultProps = {
   hd: true,
   audio: true,
+};
+
+VideoStream.propTypes = {
+  token: PropTypes.string,
+  hd: PropTypes.bool,
+  audio: PropTypes.bool,
 };
 
 export default VideoStream;

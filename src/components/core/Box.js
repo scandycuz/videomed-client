@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Text from 'util/Text';
 
 const Styled = styled.div`
   display: flex;
@@ -20,6 +20,20 @@ function Box({ children, ...props }) {
     </Styled>
   );
 }
+
+Box.propTypes = {
+  children: PropTypes.node,
+  direction: PropTypes.string,
+  flexDirection: PropTypes.string,
+  justify: PropTypes.string,
+  justifyContent: PropTypes.string,
+  align: PropTypes.string,
+  alignItems: PropTypes.string,
+  width: PropTypes.string,
+  height: PropTypes.string,
+  margin: PropTypes.string,
+  padding: PropTypes.string,
+};
 
 Box.defaultProps = {
   direction: 'column',
