@@ -27,9 +27,9 @@ function Subscription(url, token, identifier, onMessage) {
 
   /**
    * Sends an action and payload
-   * to the Signalling server.
+   * to the signalling server.
    * @param  {string} action  action to be performed
-   * @param  {[type]} content data for the request
+   * @param  {object} content data for the request
    */
   this.send = (action, content) => {
     const payload = {

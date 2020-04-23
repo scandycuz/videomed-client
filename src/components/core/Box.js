@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Styled = styled.div`
-  display: flex;
+  display: ${(props) => props.display || 'flex'};
+  position: ${(props) => props.position};
   flex-direction: ${(props) => props.direction || props.flexDirection};
   justify-content: ${(props) => props.justify || props.justifyContent};
   align-items: ${(props) => props.align || props.alignItems};
   width: ${(props) => props.width};
+  max-width: ${(props) => props.maxWidth};
+  max-height: ${(props) => props.maxHeight};
   height: ${(props) => props.height};
   margin: ${(props) => props.margin};
   margin-top: ${(props) => props.marginTop};
@@ -19,6 +22,12 @@ const Styled = styled.div`
   padding-bottom: ${(props) => props.paddingBottom};
   padding-left: ${(props) => props.paddingLeft};
   padding-right: ${(props) => props.paddingRight};
+  left: ${(props) => props.left};
+  right: ${(props) => props.right};
+  top: ${(props) => props.top};
+  bottom: ${(props) => props.bottom};
+  border-radius: ${(props) => props.borderRadius};
+  overflow: ${(props) => props.overflow};
 `;
 
 function Box({ children, ...props }) {
@@ -31,6 +40,7 @@ function Box({ children, ...props }) {
 
 Box.propTypes = {
   children: PropTypes.node,
+  position: PropTypes.string,
   direction: PropTypes.string,
   flexDirection: PropTypes.string,
   justify: PropTypes.string,

@@ -1,23 +1,15 @@
 import {
   RECEIVE_STREAM,
+  RECEIVE_PEER_CONNECTION,
+  RECEIVE_PARTICIPANT,
   RECEIVE_STREAM_LOADING,
-  RECEIVE_STREAM_CONSTRAINTS,
 } from 'actions/types';
 
 const nullState = {
-  stream: null,
+  streams: [],
+  pc: null,
   loading: false,
-  constraints: {
-    video: {
-      width: {
-        min: 1280,
-      },
-      height: {
-        min: 720,
-      },
-    },
-    audio: false,
-  },
+  participants: [],
 };
 
 const stream = (state = nullState, action) => {
@@ -25,21 +17,29 @@ const stream = (state = nullState, action) => {
     case RECEIVE_STREAM:
       return {
         ...state,
-        stream: action.stream,
+        streams: [
+          ...state.streams.filter(({ id }) => id !== action.stream.id),
+          action.stream,
+        ],
+      };
+    case RECEIVE_PEER_CONNECTION:
+      return {
+        ...state,
+        pc: action.pc,
       }
+    case RECEIVE_PARTICIPANT:
+      return {
+        ...state,
+        participants: [
+          ...state.participants,
+          action.participant,
+        ],
+      };
     case RECEIVE_STREAM_LOADING:
       return {
         ...state,
         loading: action.loading,
       }
-    case RECEIVE_STREAM_CONSTRAINTS:
-      return {
-        ...state,
-        constraints: {
-          ...state.constraints,
-          ...action.constraints,
-        },
-      };
     default:
       return state
   }

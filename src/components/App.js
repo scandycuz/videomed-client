@@ -11,11 +11,11 @@ class App extends Component {
 	static propTypes = {
 		token: PropTypes.string,
 		loggedIn: PropTypes.bool,
-		stream: PropTypes.object,
+		streams: PropTypes.array,
 		loading: PropTypes.bool,
 		login: PropTypes.func.isRequired,
 		createStream: PropTypes.func.isRequired,
-		inviteToStream: PropTypes.func.isRequired,
+		inviteToRoom: PropTypes.func.isRequired,
 	}
 
 	render() {
@@ -37,9 +37,9 @@ class App extends Component {
 
 					<ProtectedRoute path="/" enabled={this.props.loggedIn}>
 						<VideoStream
-							stream={this.props.stream}
+							streams={this.props.streams}
 							createStream={this.props.createStream}
-							inviteToStream={this.props.inviteToStream}
+							inviteToRoom={this.props.inviteToRoom}
 						/>
 					</ProtectedRoute>
 				</Switch>

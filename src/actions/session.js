@@ -29,7 +29,7 @@ export function login(email, password) {
       // connect websocket
       Cable.initialize(`${protocol.replace('http', 'ws')}${base}/cable`, token);
       await Cable.subscribe({
-        channel: 'UserChannel',
+        channel: 'SessionChannel',
         id: currentUser.id,
       }, (event) => {
         const data = JSON.parse(event.data);

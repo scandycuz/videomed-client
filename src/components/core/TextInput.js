@@ -6,7 +6,7 @@ const StyledInput = styled.input`
   width: ${({ full }) => full && '100%'};
   padding: 1rem;
   border: none;
-  border-radius: 0.25rem;
+  border-radius: 0.35rem;
   font-size: 1rem;
 `;
 

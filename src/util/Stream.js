@@ -1,41 +1,48 @@
 import API from 'util/API';
 
-function Stream() {
-  this.initialize = async (token, constraints) => {
+class Stream {
+  constructor(token) {
+    this.token = token;
+  }
+
+  static createStream = (constraints) => {
+    return navigator.mediaDevices.getUserMedia(constraints);
+  }
+
+  static attachStream = (ref, stream) => {
     try {
-      this.config = await getConfig(token);
-      this.stream = await navigator.mediaDevices.getUserMedia(constraints);
-      this.pc = createPeerConnection();
+      ref.srcObject = stream;
     } catch(e) {
       console.log(e);
     }
   }
 
-  this.attachTo = async (ref) => {
+  initialize = async (localStream) => {
     try {
-      ref.srcObject = this.stream;
+      this.config = await this.getConfig(this.token);
+      this.pc = this.createPeerConnection(localStream);
     } catch(e) {
       console.log(e);
     }
   }
 
-  const getConfig = (token) => {
-    return API.fetchTwilioConfig(token);
-  }
-
-  const createPeerConnection = () => {
+  createPeerConnection = (localStream) => {
     try {
       const ice = { iceServers: this.config.ice_servers };
-      const peerConnection = new RTCPeerConnection(ice);
+      const pc = new RTCPeerConnection(ice);
 
-      for (const track of this.stream.getTracks()) {
-        peerConnection.addTrack(track, this.stream);
+      for (const track of localStream.getTracks()) {
+        pc.addTrack(track, localStream);
       }
 
-      return peerConnection;
+      return pc;
     } catch(e) {
       console.log(e);
     }
+  }
+
+  getConfig = (token) => {
+    return API.fetchTwilioConfig(token);
   }
 }
 

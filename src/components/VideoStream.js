@@ -1,44 +1,74 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import Box from 'components/core/Box';
 import Button from 'components/core/Button';
+import Video from 'components/core/Video';
+import Stream from 'util/Stream';
 
-const Video = styled.video`
-  max-width: 100%;
-`;
+function VideoStream({ streams, createStream, inviteToRoom }) {
+  const self = useRef();
+  const guest = useRef();
 
-function VideoStream({ stream, createStream, inviteToStream }) {
-  const videoRef = useRef();
-
-  function handleInviteToStream(userId) {
-    inviteToStream(userId);
-  }
+  const alone = streams.length === 1;
 
   useEffect(() => {
-    if (stream) stream.attachTo(videoRef.current);
-  }, [stream]);
+    if (streams.length === 1) Stream.attachStream(self.current, streams[0]);
+    if (streams.length === 2) Stream.attachStream(guest.current, streams[1]);
+  }, [streams]);
+
+  function handleCreateStream() {
+    createStream({ audio: true, video: true });
+  }
+
+  function handleInviteToRoom(userId) {
+    inviteToRoom(userId);
+  }
 
   return (
     <Box
       align="center"
       padding="1rem"
     >
-      <Video
-        ref={videoRef}
-        autoPlay
-      />
+      <Box position="relative" width="98vh">
+        <Box
+          display={streams[0] ? 'flex' : 'none'}
+          position={alone ? 'relative' : 'absolute'}
+          width={alone ? '100%' : '12rem'}
+          right={alone ? undefined : '-12.75rem'}
+          borderRadius="5px"
+          overflow="hidden"
+          height="auto"
+        >
+          <Video
+            ref={self}
+            autoPlay
+            muted
+          />
+        </Box>
+
+        <Box
+          display={streams[1] ? 'flex' : 'none'}
+          width="100%"
+          borderRadius="5px"
+          overflow="hidden"
+        >
+          <Video
+            ref={guest}
+            autoPlay
+          />
+        </Box>
+      </Box>
 
       <Box marginTop="1rem" direction="row" justify="center">
         <Box marginRight="2rem">
-          <Button onClick={createStream}>
-            Create stream
+          <Button onClick={handleCreateStream}>
+            Create
           </Button>
         </Box>
 
         <Box marginLeft="2rem">
-          <Button onClick={() => handleInviteToStream(2)}>
-            Invite to Stream
+          <Button onClick={() => handleInviteToRoom(2)}>
+            Invite
           </Button>
         </Box>
       </Box>
@@ -47,9 +77,9 @@ function VideoStream({ stream, createStream, inviteToStream }) {
 }
 
 VideoStream.propTypes = {
-  stream: PropTypes.object,
+  streams: PropTypes.array,
   createStream: PropTypes.func,
-  inviteToStream: PropTypes.func,
+  inviteToRoom: PropTypes.func,
 };
 
 export default VideoStream;
