@@ -1,63 +1,55 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import Stream from 'util/Stream';
 import Box from 'components/core/Box';
-
-let stream;
+import Button from 'components/core/Button';
 
 const Video = styled.video`
   max-width: 100%;
 `;
 
-function VideoStream({ token, hd, audio }) {
-  const video = hd ? {
-    width: {
-      min: 1280,
-    },
-    height: {
-      min: 720,
-    },
-  } : true;
-
-  const constraints = {
-    video,
-    audio,
-  };
-
+function VideoStream({ stream, createStream, inviteToStream }) {
   const videoRef = useRef();
 
-  useEffect(() => {
-    async function initializeStream() {
-      stream = new Stream();
-      await stream.initialize(token, constraints);
-      stream.attachTo(videoRef.current);
-      // TEMP
-      console.log(stream);
-    }
+  function handleInviteToStream(userId) {
+    inviteToStream(userId);
+  }
 
-    initializeStream();
-  }, []);
+  useEffect(() => {
+    if (stream) stream.attachTo(videoRef.current);
+  }, [stream]);
 
   return (
-    <Box>
+    <Box
+      align="center"
+      padding="1rem"
+    >
       <Video
         ref={videoRef}
         autoPlay
       />
+
+      <Box marginTop="1rem" direction="row" justify="center">
+        <Box marginRight="2rem">
+          <Button onClick={createStream}>
+            Create stream
+          </Button>
+        </Box>
+
+        <Box marginLeft="2rem">
+          <Button onClick={() => handleInviteToStream(2)}>
+            Invite to Stream
+          </Button>
+        </Box>
+      </Box>
     </Box>
   );
 }
 
-VideoStream.defaultProps = {
-  hd: true,
-  audio: true,
-};
-
 VideoStream.propTypes = {
-  token: PropTypes.string,
-  hd: PropTypes.bool,
-  audio: PropTypes.bool,
+  stream: PropTypes.object,
+  createStream: PropTypes.func,
+  inviteToStream: PropTypes.func,
 };
 
 export default VideoStream;

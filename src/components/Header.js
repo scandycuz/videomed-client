@@ -10,7 +10,7 @@ class Header extends Component {
 
   render() {
     return (
-      <Box padding="1rem">
+      <Box padding="1rem" direction="row" justify="center">
         <Typography as="h1">{ this.props.title }</Typography>
       </Box>
     );

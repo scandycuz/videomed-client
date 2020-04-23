@@ -12,6 +12,9 @@ module.exports = {
 		modules: [path.resolve(__dirname, './src'), 'node_modules'],
 	},
 	devtool: 'source-map',
+	devServer: {
+    historyApiFallback: true,
+  },
 	module: {
 		rules: [
 			{

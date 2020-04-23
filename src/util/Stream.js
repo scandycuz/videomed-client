@@ -5,7 +5,7 @@ function Stream() {
     try {
       this.config = await getConfig(token);
       this.stream = await navigator.mediaDevices.getUserMedia(constraints);
-      this.peerConnection = createPeerConnection();
+      this.pc = createPeerConnection();
     } catch(e) {
       console.log(e);
     }

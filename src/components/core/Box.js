@@ -10,7 +10,15 @@ const Styled = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   margin: ${(props) => props.margin};
+  margin-top: ${(props) => props.marginTop};
+  margin-bottom: ${(props) => props.marginBottom};
+  margin-left: ${(props) => props.marginLeft};
+  margin-right: ${(props) => props.marginRight};
   padding: ${(props) => props.padding};
+  padding-top: ${(props) => props.paddingTop};
+  padding-bottom: ${(props) => props.paddingBottom};
+  padding-left: ${(props) => props.paddingLeft};
+  padding-right: ${(props) => props.paddingRight};
 `;
 
 function Box({ children, ...props }) {
@@ -32,7 +40,15 @@ Box.propTypes = {
   width: PropTypes.string,
   height: PropTypes.string,
   margin: PropTypes.string,
+  marginTop: PropTypes.string,
+  marginBottom: PropTypes.string,
+  marginLeft: PropTypes.string,
+  marginRight: PropTypes.string,
   padding: PropTypes.string,
+  paddingTop: PropTypes.string,
+  paddingBottom: PropTypes.string,
+  paddingLeft: PropTypes.string,
+  paddingRight: PropTypes.string,
 };
 
 Box.defaultProps = {

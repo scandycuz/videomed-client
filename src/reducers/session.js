@@ -1,8 +1,13 @@
-import { RECEIVE_AUTH_TOKEN, RECEIVE_SESSION_LOADING } from 'actions/types';
+import {
+  RECEIVE_AUTH_TOKEN,
+  RECEIVE_SESSION_LOADING,
+  RECEIVE_CURRENT_USER,
+} from 'actions/types';
 
 const nullState = {
   token: null,
-  loading: true,
+  currentUser: {},
+  loading: false,
 };
 
 const session = (state = nullState, action) => {
@@ -11,6 +16,11 @@ const session = (state = nullState, action) => {
       return {
         ...state,
         token: action.token,
+      }
+    case RECEIVE_CURRENT_USER:
+      return {
+        ...state,
+        currentUser: action.currentUser,
       }
     case RECEIVE_SESSION_LOADING:
       return {
