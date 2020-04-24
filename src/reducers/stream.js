@@ -1,15 +1,19 @@
 import {
   RECEIVE_STREAM,
+  REMOVE_STREAM,
+  END_STREAM,
   RECEIVE_PEER_CONNECTION,
   RECEIVE_PARTICIPANT,
+  RECEIVE_FULL_SCREEN,
   RECEIVE_STREAM_LOADING,
 } from 'actions/types';
 
 const nullState = {
-  streams: [],
+  streams: {},
   pc: null,
-  loading: false,
   participants: [],
+  loading: false,
+  fullScreen: false,
 };
 
 const stream = (state = nullState, action) => {
@@ -17,11 +21,25 @@ const stream = (state = nullState, action) => {
     case RECEIVE_STREAM:
       return {
         ...state,
-        streams: [
-          ...state.streams.filter(({ id }) => id !== action.stream.id),
-          action.stream,
-        ],
+        streams: {
+          ...state.streams,
+          [action.user]: action.stream,
+        },
       };
+    case END_STREAM:
+      return {
+        ...state,
+        pc: null,
+        streams: {},
+      };
+    case REMOVE_STREAM:
+      return {
+        ...state,
+        participants: [],
+        streams: {
+          self: state.streams.self,
+        }
+      }
     case RECEIVE_PEER_CONNECTION:
       return {
         ...state,
@@ -34,6 +52,11 @@ const stream = (state = nullState, action) => {
           ...state.participants,
           action.participant,
         ],
+      };
+    case RECEIVE_FULL_SCREEN:
+      return {
+        ...state,
+        fullScreen: action.status,
       };
     case RECEIVE_STREAM_LOADING:
       return {

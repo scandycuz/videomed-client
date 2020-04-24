@@ -1,15 +1,16 @@
 import API from 'util/API';
 import Cable from 'util/Cable';
 import { protocol, base } from 'util/env';
-import { format } from 'util/methods';
+import { format, unformat } from 'util/methods';
 import { receiveMessage } from 'actions/stream';
 import {
   RECEIVE_AUTH_TOKEN,
   RECEIVE_SESSION_LOADING,
+  RECEIVE_SESSION_ERROR,
   RECEIVE_CURRENT_USER,
 } from 'actions/types';
 
-export function login(email, password) {
+export function login({ email, password }) {
   return async function(dispatch) {
     try {
       let resp;
@@ -17,7 +18,7 @@ export function login(email, password) {
       dispatch(receiveSessionLoading(true));
 
       // authenticate
-      resp = await API.createSession(email, password);
+      resp = await API.createSession({ email, password });
       const token = resp.data.auth_token;
       dispatch(receiveAuthToken(token));
 
@@ -41,8 +42,23 @@ export function login(email, password) {
 
       dispatch(receiveSessionLoading(false));
     } catch(e) {
-      receiveSessionLoading(false);
-      console.log(e);
+      dispatch(receiveSessionError('Invalid email or password'));
+      dispatch(receiveSessionLoading(false));
+    }
+  }
+}
+
+export function createAccount(params) {
+  return async function(dispatch) {
+    try {
+      dispatch(receiveSessionLoading(true));
+
+      await API.createAccount(unformat(params));
+
+      dispatch(receiveSessionLoading(false));
+    } catch(e) {
+      dispatch(receiveSessionError('There was an error creating your account'));
+      dispatch(receiveSessionLoading(false));
     }
   }
 }
@@ -65,5 +81,12 @@ export function receiveSessionLoading(loading) {
   return {
     type: RECEIVE_SESSION_LOADING,
     loading,
+  };
+}
+
+export function receiveSessionError(error) {
+  return {
+    type: RECEIVE_SESSION_ERROR,
+    error,
   };
 }

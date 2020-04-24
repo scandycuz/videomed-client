@@ -4,7 +4,9 @@ import styled from 'styled-components';
 
 const Styled = styled.div`
   display: ${(props) => props.display || 'flex'};
+  flex: ${(props) => props.flex && '1 1 auto'};
   position: ${(props) => props.position};
+  background: ${(props) => props.background};
   flex-direction: ${(props) => props.direction || props.flexDirection};
   justify-content: ${(props) => props.justify || props.justifyContent};
   align-items: ${(props) => props.align || props.alignItems};
@@ -26,6 +28,10 @@ const Styled = styled.div`
   right: ${(props) => props.right};
   top: ${(props) => props.top};
   bottom: ${(props) => props.bottom};
+  border-top: ${({ theme, separator }) => separator === 'top' && `1px solid ${theme.grey.light}`};
+  border-right: ${({ theme, separator }) => separator === 'right' && `1px solid ${theme.grey.light}`};
+  border-bottom: ${({ theme, separator }) => separator === 'bottom' && `1px solid ${theme.grey.light}`};
+  border-left: ${({ theme, separator }) => separator === 'left' && `1px solid ${theme.grey.light}`};
   border-radius: ${(props) => props.borderRadius};
   overflow: ${(props) => props.overflow};
 `;

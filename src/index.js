@@ -4,14 +4,29 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
+import axios from 'axios';
 import store from 'store';
+import theme from 'theme';
 import App from './containers/App';
+
+axios.interceptors.response.use(response => {
+   return response;
+}, error => {
+  if (error.response.status === 401) {
+    window.sessionStorage.removeItem('token');
+  }
+
+  return Promise.reject(error);
+});
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
+      <ThemeProvider theme={theme}>
+      <Router>
+        <App />
+      </Router>
+    </ThemeProvider>
   </Provider>,
   document.getElementById('app'),
 );

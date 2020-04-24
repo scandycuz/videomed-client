@@ -1,6 +1,7 @@
 import {
   RECEIVE_AUTH_TOKEN,
   RECEIVE_SESSION_LOADING,
+  RECEIVE_SESSION_ERROR,
   RECEIVE_CURRENT_USER,
 } from 'actions/types';
 
@@ -8,6 +9,7 @@ const nullState = {
   token: null,
   currentUser: {},
   loading: false,
+  error: '',
 };
 
 const session = (state = nullState, action) => {
@@ -27,6 +29,11 @@ const session = (state = nullState, action) => {
         ...state,
         loading: action.loading,
       }
+    case RECEIVE_SESSION_ERROR:
+      return {
+        ...state,
+        error: action.error,
+      };
     default:
       return state
   }

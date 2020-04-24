@@ -1,12 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Container from 'components/core/Container';
 import Box from 'components/core/Box';
 import TextInput from 'components/core/TextInput';
+import PasswordInput from 'components/core/PasswordInput';
+import Typography from 'components/core/Typography';
 import Button from 'components/core/Button';
+import Link from 'components/core/Link';
+import Form from 'components/core/Form';
+import Field from 'components/core/Field';
 
 export class Login extends Component {
   static propTypes = {
-    login: PropTypes.func,
+    loading: PropTypes.bool,
+    error: PropTypes.string,
+    onSubmit: PropTypes.func.isRequired,
+    resetSessionError: PropTypes.func.isRequired,
+  }
+
+  static defaultProps = {
+    loading: false,
   }
 
   state = {
@@ -15,46 +28,78 @@ export class Login extends Component {
   }
 
   handleChange = (event) => {
-    const { target } = event;
+    if (this.props.error) this.props.resetSessionError();
 
-    this.setState({ [target.name]: target.value });
+    const { name, value } = event.target;
+
+    this.setState({ [name]: value });
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    this.props.login(this.state);
+    this.props.onSubmit(this.state);
   }
 
   render() {
     return (
-      <Box width="100%" marginTop="6rem" align="center">
-        <form onSubmit={this.handleSubmit}>
-          <Box width="18rem">
-            <Box marginBottom="1rem">
-              <TextInput
-                name="email"
-                value={this.state.email}
-                onChange={this.handleChange}
-              />
-            </Box>
+      <Container width="xs">
+        <Box width="100%" marginTop="6rem" align="center">
+          <Form onSubmit={this.handleSubmit}>
+            <Box>
+              <Box marginBottom="1rem">
+                <Field>
+                  <TextInput
+                    name="email"
+                    placeholder="Email"
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                  />
+                </Field>
+              </Box>
 
-            <Box marginBottom="1rem">
-              <TextInput
-                name="password"
-                type="password"
-                value={this.state.password}
-                onChange={this.handleChange}
-              />
-            </Box>
+              <Box marginBottom="1rem">
+                <Field>
+                  <PasswordInput
+                    name="password"
+                    placeholder="Password"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                  />
+                </Field>
+              </Box>
 
-            <Button type="submit">
-              Login
-            </Button>
+              { this.props.error && (
+                <Box marginTop="-0.25rem" marginBottom="0.5rem" align="center">
+                  <Typography color="critical">
+                    { this.props.error }
+                  </Typography>
+                </Box>
+              )}
+
+              <Button
+                disabled={this.props.loading}
+                type="submit"
+              >
+                Log in
+              </Button>
+            </Box>
+          </Form>
+
+          <Box marginTop="1.5rem" width="100%">
+            <Typography size="1.1rem" color="black.light" align="center">
+              Don&apos;t have an account?
+
+              <Box display="inline" marginLeft="0.5rem">
+                <Link color="black" to="/signup">
+                  <strong>Sign up</strong>
+                </Link>
+              </Box>
+            </Typography>
           </Box>
-        </form>
-      </Box>
-    )
+        </Box>
+      </Container>
+    );
   }
 }
 

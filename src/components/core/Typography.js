@@ -1,11 +1,16 @@
-import React from 'react';
+import { createElement } from 'react';
+import styled from 'styled-components';
+import { normalizeColor } from 'util/methods';
 import PropTypes from 'prop-types';
 
-function Typography({ as, children }) {
-  const Tag = React.createElement(as, {}, children);
+const Typography = ({ as, children, ...rest }) => createElement(as, rest, children);
 
-  return Tag;
-}
+const StyledTypography = styled(Typography)`
+  color: ${({ theme, color }) => color ? normalizeColor(theme, color) : theme.black.main};
+  line-height: ${({ lineHeight }) => lineHeight || '1.45em'};
+  font-size: ${({ size }) => size};
+  text-align: ${({ align }) => align};
+`;
 
 Typography.defaultProps = {
   as: 'span',
@@ -16,4 +21,4 @@ Typography.propTypes = {
   children: PropTypes.node,
 }
 
-export default Typography;
+export default StyledTypography;
