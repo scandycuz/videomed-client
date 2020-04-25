@@ -33,7 +33,7 @@ class Header extends Component {
             <Typography as="h1">{ this.props.title }</Typography>
           </Box>
 
-          <Box width="100%" align="flex-end">
+          <Box width="100%" align="flex-end" zIndex={1000}>
             <Menu
               loggedIn={this.props.loggedIn}
               currentUser={this.props.currentUser}

@@ -25,8 +25,7 @@ export class Home extends Component {
   }
 
   startCall = async (userId) => {
-    // await this.props.createStream({ audio: true, video: true });
-    await this.props.createStream({ audio: false, video: true });
+    await this.props.createStream({ audio: true, video: true });
     this.props.inviteToRoom(userId);
   }
 
@@ -34,18 +33,13 @@ export class Home extends Component {
     return (
       <Box align="center">
         { this.props.streams.self ? (
-          this.props.loading ? (
-            <span>Loading Placeholder</span>
-          ) : (
-            <VideoRoom
-              streams={this.props.streams}
-              fullScreen={this.props.fullScreen}
-              setFullScreen={this.props.setFullScreen}
-              createStream={this.props.createStream}
-              closeStream={this.props.closeStream}
-              inviteToRoom={this.props.inviteToRoom}
-            />
-          )
+          <VideoRoom
+            loading={this.props.loading}
+            streams={this.props.streams}
+            fullScreen={this.props.fullScreen}
+            setFullScreen={this.props.setFullScreen}
+            closeStream={this.props.closeStream}
+          />
         ) : (
           <Box marginTop="3.5rem" width="28rem" maxWidth="100%">
             <Box align="center" >
@@ -64,10 +58,26 @@ export class Home extends Component {
             </Box>
 
             <Box margin="1rem 0" minHeight="8.5rem">
-              <Users
-                users={this.props.users}
-                onClick={ this.props.currentUser.type === 'Physician' ? this.startCall : undefined}
-              />
+              { !this.props.users.length ? (
+                <Box
+                  padding="1.75rem"
+                  borderRadius="1rem"
+                  background="grey.light"
+                >
+                  <Typography
+                    size="1.1rem"
+                    color="black.light"
+                    align="center"
+                  >
+                    No patients with user accounts found.
+                  </Typography>
+                </Box>
+              ) : (
+                <Users
+                  users={this.props.users}
+                  onClick={ this.props.currentUser.type === 'Physician' ? this.startCall : undefined}
+                />
+              )}
             </Box>
 
             <Box marginTop="1rem" align="center">

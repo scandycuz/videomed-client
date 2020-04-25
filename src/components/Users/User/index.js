@@ -23,6 +23,7 @@ export function User({
   email,
   phone,
   company,
+  type,
   onClick,
 }) {
   return (
@@ -33,7 +34,9 @@ export function User({
 
       <Box width="100%">
         <Box align="flex-start">
-          <Typography size="1.1rem" as="h5">{ firstName } { lastName }</Typography>
+          <Typography size="1.1rem" as="h5">
+            { type === 'Physician' ? 'Dr.' : ''} { firstName } { lastName }
+          </Typography>
           <Typography size="1.1rem">{ email }</Typography>
           { phone && <Typography size="1.1rem">{ phone }</Typography> }
           { company && <Typography size="1.1rem">{ company }</Typography> }

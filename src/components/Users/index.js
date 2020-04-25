@@ -19,7 +19,7 @@ export function Users({ users, onClick }) {
           return (
             <Box
               key={user.email}
-              marginBottom={idx === users.length - 1 ? 0 : '1rem'}
+              marginBottom={idx === users.length - 1 ? 0 : '0.75rem'}
             >
               <User
                 onClick={onClick}
