@@ -17,6 +17,14 @@ class Stream {
     }
   }
 
+  static stopStream = (stream) => {
+    const tracks = stream.getTracks();
+
+    tracks.forEach((track) => {
+      track.stop();
+    });
+  }
+
   initialize = async (localStream) => {
     try {
       this.config = await this.getConfig(this.token);

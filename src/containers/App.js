@@ -1,30 +1,29 @@
 import { connect } from 'react-redux';
-import { login, createAccount, receiveSessionError } from 'actions/session';
+import { closeStream } from 'actions/stream';
 import {
-  createStream,
-  closeStream,
-  inviteToRoom,
-  setFullScreen,
-} from 'actions/stream';
+  login,
+  logout,
+  createAccount,
+  loginFromSession,
+  receiveSessionError
+} from 'actions/session';
 import App from 'components/App';
 
-const mapStateToProps = ({ session, stream }) => ({
+const mapStateToProps = ({ session }) => ({
   token: session.token,
   loggedIn: !!session.token,
-  streams: stream.streams,
-  fullScreen: stream.fullScreen,
+  currentUser: session.currentUser,
   loading: session.loading,
   error: session.error,
 });
 
 const mapDispatchToProps = dispatch => ({
   login: (params) => dispatch(login(params)),
+  loginFromSession: () => dispatch(loginFromSession()),
+  logout: () => dispatch(logout()),
   createAccount: (params) => dispatch(createAccount(params)),
-  createStream: (constraints) => dispatch(createStream(constraints)),
-  closeStream: () => dispatch(closeStream()),
-  inviteToRoom: (userId) => dispatch(inviteToRoom(userId)),
-  setFullScreen: (status) => dispatch(setFullScreen(status)),
   resetSessionError: () => dispatch(receiveSessionError('')),
+  closeStream: () => dispatch(closeStream()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

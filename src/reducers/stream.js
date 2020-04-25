@@ -11,7 +11,7 @@ import {
 const nullState = {
   streams: {},
   pc: null,
-  participants: [],
+  participant: null,
   loading: false,
   fullScreen: false,
 };
@@ -30,12 +30,13 @@ const stream = (state = nullState, action) => {
       return {
         ...state,
         pc: null,
+        participant: null,
         streams: {},
       };
     case REMOVE_STREAM:
       return {
         ...state,
-        participants: [],
+        participant: null,
         streams: {
           self: state.streams.self,
         }
@@ -48,10 +49,7 @@ const stream = (state = nullState, action) => {
     case RECEIVE_PARTICIPANT:
       return {
         ...state,
-        participants: [
-          ...state.participants,
-          action.participant,
-        ],
+        participant: action.participant,
       };
     case RECEIVE_FULL_SCREEN:
       return {

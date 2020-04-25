@@ -1,5 +1,6 @@
 // session types
 export const RECEIVE_AUTH_TOKEN = 'RECEIVE_AUTH_TOKEN';
+export const RECEIVE_LOGOUT = 'RECEIVE_LOGOUT';
 export const RECEIVE_SESSION_LOADING = 'RECEIVE_SESSION_LOADING';
 export const RECEIVE_SESSION_ERROR = 'RECEIVE_SESSION_ERROR';
 export const RECEIVE_CURRENT_USER = 'RECEIVE_CURRENT_USER';
@@ -14,6 +15,14 @@ export const RECEIVE_FULL_SCREEN = 'RECEIVE_FULL_SCREEN';
 export const RECEIVE_STREAM_LOADING = 'RECEIVE_STREAM_LOADING';
 
 // message types
-export const OFFER = "OFFER";
-export const ANSWER = "ANSWER";
+export const JOIN_ROOM = "JOIN_ROOM";
 export const EXCHANGE = "EXCHANGE";
+
+// user types
+export const RECEIVE_USER = "RECEIVE_USER";
+export const RECEIVE_USERS = "RECEIVE_USERS";
+export const RECEIVE_USER_LOADING = "RECEIVE_USER_LOADING";
+
+// global types
+export const RECEIVE_GLOBAL_ERROR = 'RECEIVE_GLOBAL_ERROR';
+export const REMOVE_GLOBAL_ERROR = 'REMOVE_GLOBAL_ERROR';

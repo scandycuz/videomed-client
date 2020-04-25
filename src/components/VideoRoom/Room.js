@@ -26,7 +26,7 @@ export function Room({ streams, setFullScreen, closeStream }) {
     <Box position="relative" width="98vh">
       <Box>
         <Box
-          display={streams.self ? 'flex' : 'none'}
+          display="flex"
           position={alone ? 'relative' : 'absolute'}
           width={alone ? '100%' : '12rem'}
           right={alone ? undefined : '-12.75rem'}

@@ -2,15 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Box from 'components/core/Box';
+import Base from './Base';
 
-const StyledButton = styled.button`
-  outline: none;
+const StyledButton = styled(Base)`
   padding: 0.75rem 1.5rem;
   border-radius: ${({ round }) => round ? '1.5rem' : '8px'};
-  font-size: 1.25rem;
-  border: none;
-  cursor: ${({ disabled }) => disabled ? 'default' : 'pointer'};
-  opacity: ${({ opacity }) => opacity};
   color: ${({ color, plain, theme }) =>
     color ? color :
     plain ? theme.secondary.main :
@@ -22,7 +18,6 @@ const StyledButton = styled.button`
     critical ? theme.critical.main :
     theme.primary.main};
   width: ${({ full }) => full && '100%'};
-  transition: 100ms;
 
   &:hover {
     background: ${({ background, disabled, plain, critical, theme }) =>
@@ -31,7 +26,6 @@ const StyledButton = styled.button`
       plain ? theme.grey.main :
       critical ? theme.critical.dark :
       theme.primary.dark};
-    opacity: 1,
   }
 `;
 
@@ -50,6 +44,7 @@ const Button = ({ children, onClick, ...rest }) => {
 
 Button.propTypes = {
   full: PropTypes.bool,
+  disabled: PropTypes.bool,
   plain: PropTypes.bool,
   background: PropTypes.string,
   color: PropTypes.string,
@@ -61,6 +56,7 @@ Button.propTypes = {
 Button.defaultProps = {
   full: true,
   plain: false,
+  disabled: false,
 };
 
 export default Button;

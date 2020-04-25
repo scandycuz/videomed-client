@@ -233,8 +233,8 @@ export class Signup extends Component {
                 <Box margin="0.75rem 0.75rem">
                   <Typography color="grey.dark">
                     In order to create an account, please obtain an invite code
-                    by contacting us at <Link color="black.light" href="mailto:test@gmail.com">
-                    <strong>test@gmail.com</strong></Link>. We look forward to hearing from you!
+                    by contacting us at <Link color="black.light" href="mailto:invite@webmed.app">
+                    <strong>invite@webmed.app</strong></Link>. We look forward to hearing from you!
                   </Typography>
                 </Box>
               </Box>

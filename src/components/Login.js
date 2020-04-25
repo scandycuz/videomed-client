@@ -28,8 +28,6 @@ export class Login extends Component {
   }
 
   handleChange = (event) => {
-    if (this.props.error) this.props.resetSessionError();
-
     const { name, value } = event.target;
 
     this.setState({ [name]: value });

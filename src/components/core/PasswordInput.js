@@ -68,6 +68,7 @@ export default withTheme(PasswordInput);
 const StyledButton = styled.button`
   opacity: 0.85;
   cursor: pointer;
+  background: transparent;
   border: none;
   outline: none;
   transition: all 150ms;

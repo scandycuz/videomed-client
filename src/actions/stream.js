@@ -8,10 +8,11 @@ import {
   RECEIVE_PARTICIPANT,
   RECEIVE_FULL_SCREEN,
   RECEIVE_STREAM_LOADING,
-  OFFER,
-  ANSWER,
+  JOIN_ROOM,
   EXCHANGE,
 } from 'actions/types';
+
+const constraints = { audio: true, video: true };
 
 /**
  * Sends an invation to a user
@@ -21,11 +22,16 @@ import {
 export function inviteToRoom(userId) {
   return async function(dispatch, getState) {
     try {
-      const { session, stream } = getState();
-      const { token, currentUser } = session;
-      const localStream = stream.streams.self;
+      const { stream, session } = getState();
+      const { currentUser } = session;
+      const { streams } = stream;
 
-      const pc = stream.pc || await dispatch(createPC(token, localStream, true));
+      if (!streams.self) await dispatch(createStream(constraints));
+
+      dispatch(receiveStreamLoading(true));
+      setTimeout(() => {
+        dispatch(receiveStreamLoading(false));
+      }, 5000);
 
       const subscription = Cable.subscription({
         channel: 'SessionChannel',
@@ -33,10 +39,9 @@ export function inviteToRoom(userId) {
       });
 
       subscription.send('create', {
-        type: OFFER,
+        type: JOIN_ROOM,
         from: currentUser.id,
         to: userId,
-        sdp: JSON.stringify(pc.localDescription),
       });
     } catch(e) {
       console.log(e);
@@ -44,84 +49,104 @@ export function inviteToRoom(userId) {
   }
 }
 
-/**
- * Called when the user has
- * been invited to a call.
- * @param {object} data sdp information for the call
- */
-export function handleOffer(data) {
+export function joinRoom(from) {
   return async function(dispatch, getState) {
-    try {
-      const sdp = JSON.parse(data.sdp);
-      const state = getState();
-      const { token, currentUser } = state.session;
+    const { stream, session } = getState();
+    const { token, currentUser } = session;
+    const { streams } = stream;
 
-      dispatch(receiveParticipant(data.from));
+    const localStream = streams.self || await dispatch(createStream(constraints));
 
-      // const localStream = await dispatch(createStream({ audio: true, video: true }));
-      const localStream = await dispatch(createStream({ audio: false, video: true }));
+    const pc = await dispatch(createPC(token, localStream, true));
 
-      const pc = state.stream.pc || await dispatch(createPC(token, localStream));
-      pc.setRemoteDescription(new RTCSessionDescription(sdp));
+    const subscription = Cable.subscription({
+      channel: 'SessionChannel',
+      id: currentUser.id,
+    });
 
-      const answer = await pc.createAnswer();
-      pc.setLocalDescription(answer);
-
-      const subscription = Cable.subscription({
-        channel: 'SessionChannel',
-        id: currentUser.id,
-      });
-
-      subscription.send('create', {
-        type: ANSWER,
-        from: currentUser.id,
-        to: data.from,
-        sdp: JSON.stringify(pc.localDescription),
-      });
-    } catch(e) {
-      console.log(e);
-    }
+    subscription.send('create', {
+      type: EXCHANGE,
+      from: currentUser.id,
+      to: from,
+      sdp: JSON.stringify(pc.localDescription),
+    });
   }
 }
 
 /**
- * Called when the invitee has
- * responded to the invite.
- * @param {object} data sdp information for the call
- */
-export function handleAnswer(data) {
-  return async function(dispatch, getState) {
-    try {
-      const sdp = JSON.parse(data.sdp);
-      const { stream } = getState();
-      const { pc } = stream;
-
-      dispatch(receiveParticipant(data.from));
-
-      pc.setRemoteDescription(new RTCSessionDescription(sdp));
-    } catch(e) {
-      console.log(e);
-    }
-  }
-}
-
-/**
- * Handles additional data exchanged
- * between the call participants.
+ * Handles data exchanged
+ * between call participants.
  * @param {object} data information to be exchanged
  */
 export function handleExchange(data) {
   return async function(dispatch, getState) {
-    const { pc } = getState().stream;
+    const { session, stream } = getState();
+    const { token, currentUser } = session;
+    const { streams } = stream;
+
+    const localStream = streams.self || await dispatch(createStream(constraints));
+    const pc = stream.pc || await dispatch(createPC(token, localStream));
+
+    dispatch(receiveParticipant(data.from));
 
     if (data.candidate) {
       try {
-        await pc.addIceCandidate(new RTCIceCandidate(JSON.parse(data.candidate)));
+        pc.addIceCandidate(data.candidate);
         console.log('Ice candidate added');
       } catch(e) {
         console.log(e);
       }
     }
+
+    if (data.sdp) {
+      try {
+        const sdp = JSON.parse(data.sdp);
+
+        await pc.setRemoteDescription(sdp);
+
+        if (sdp.type === "offer") {
+          const answer = await pc.createAnswer();
+          await pc.setLocalDescription(answer);
+
+          const subscription = Cable.subscription({
+            channel: 'SessionChannel',
+            id: currentUser.id,
+          });
+
+          subscription.send('create', {
+            type: EXCHANGE,
+            from: currentUser.id,
+            to: data.from,
+            sdp: JSON.stringify(pc.localDescription),
+          });
+        }
+      } catch(e) {
+        console.log(e);
+      }
+    }
+  }
+}
+
+export function handleNegotiationNeeded() {
+  return async function(dispatch, getState) {
+    const { stream, session } = getState();
+    const { currentUser } = session;
+    const { participant, pc } = stream;
+
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+
+    const subscription = Cable.subscription({
+      channel: 'SessionChannel',
+      id: currentUser.id,
+    });
+
+    subscription.send('create', {
+      type: EXCHANGE,
+      from: currentUser.id,
+      to: participant,
+      sdp: JSON.stringify(pc.localDescription),
+    });
   }
 }
 
@@ -184,7 +209,7 @@ function createPC(token, localStream, isOffer = false) {
       pc.onnegotiationneeded = async () => {
         console.log('Negotiation needed');
 
-        dispatch(resetStream());
+        dispatch(handleNegotiationNeeded());
       };
 
       dispatch(receivePeerConnection(pc));
@@ -208,9 +233,12 @@ export function closeStream() {
 
       const { session, stream } = getState();
       const { currentUser } = session;
-      const { participants, pc } = stream;
+      const { participant, streams, pc } = stream;
 
       if (pc) pc.close();
+      for (const key in streams) {
+        Stream.stopStream(streams[key]);
+      }
 
       dispatch(endStream());
 
@@ -219,12 +247,10 @@ export function closeStream() {
         id: currentUser.id,
       });
 
-      participants.forEach((id) => {
-        subscription.send('create', {
-          type: REMOVE_STREAM,
-          from: currentUser.id,
-          to: id,
-        });
+      subscription.send('create', {
+        type: REMOVE_STREAM,
+        from: currentUser.id,
+        to: participant,
       });
 
       dispatch(receiveStreamLoading(false));
@@ -235,6 +261,20 @@ export function closeStream() {
   }
 }
 
+/**
+ * Closes and removes the
+ * stream for another user.
+ * @param {string} user identifer for the user
+ */
+export function stopStream(user) {
+  return function(dispatch, getState) {
+    const { streams } = getState().stream;
+    Stream.stopStream(streams[user]);
+
+    dispatch(removeStream());
+  }
+}
+
 export function receiveMessage(message) {
   return function(dispatch, getState) {
     const { currentUser } = getState().session;
@@ -242,12 +282,12 @@ export function receiveMessage(message) {
     if (message.from === currentUser.id) return;
 
     switch(message.type) {
-      case OFFER:
-        return dispatch(handleOffer(message));
-      case ANSWER:
-        return dispatch(handleAnswer(message));
+      case JOIN_ROOM:
+        return dispatch(joinRoom(message.from));
+      case EXCHANGE:
+        return dispatch(handleExchange(message));
       case REMOVE_STREAM:
-        return dispatch(removeStream());
+        return dispatch(stopStream('guest'));
       default:
         return;
     }
@@ -258,7 +298,7 @@ function handleIceCandidate(event) {
   return function(dispatch, getState) {
     const { stream, session } = getState();
     const { currentUser } = session;
-    const { participants } = stream;
+    const { participant } = stream;
 
     const subscription = Cable.subscription({
       channel: 'SessionChannel',
@@ -266,28 +306,15 @@ function handleIceCandidate(event) {
     });
 
     if (event.candidate) {
-      participants.forEach((id) => {
-        subscription.send('create', {
-          type: EXCHANGE,
-          from: currentUser.id,
-          to: id,
-          candidate: JSON.stringify(event.candidate)
-        });
+      subscription.send('create', {
+        type: EXCHANGE,
+        from: currentUser.id,
+        to: participant,
+        candidate: JSON.stringify(event.candidate)
       });
+    } else {
+      dispatch(receiveStreamLoading(false));
     }
-  }
-}
-
-function resetStream() {
-  return function(dispatch, getState) {
-    const { participants, pc } = getState().stream;
-
-    pc.close();
-    dispatch(receivePeerConnection(null));
-
-    participants.forEach((id) => {
-      dispatch(inviteToRoom(id));
-    });
   }
 }
 

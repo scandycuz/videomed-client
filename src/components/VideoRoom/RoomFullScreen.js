@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react';
-import styled, { withTheme } from 'styled-components';
+import { withTheme } from 'styled-components';
 import PropTypes from 'prop-types';
 import { FiMinimize, FiPhone } from "react-icons/fi";
 import Box from 'components/core/Box';
 import Video from 'components/core/Video';
 import Typography from 'components/core/Typography';
+import Button from 'components/core/Button/Base';
 import Stream from 'util/Stream';
 
 export function RoomFullScreen({ theme, streams, setFullScreen, closeStream }) {
@@ -30,8 +31,9 @@ export function RoomFullScreen({ theme, streams, setFullScreen, closeStream }) {
   return (
     <Box
       position="fixed"
+      zIndex="1000"
       justify="space-between"
-      background={theme.black.dark}
+      background="black.dark"
       top="0"
       right="0"
       bottom="0"
@@ -42,7 +44,7 @@ export function RoomFullScreen({ theme, streams, setFullScreen, closeStream }) {
         height="calc(100vh - 4rem)"
       >
         <Box
-          display={streams.self ? 'flex' : 'none'}
+          display="flex"
           position={alone ? 'relative' : 'absolute'}
           width={alone ? '100%' : '12rem'}
           top={alone ? undefined : '0.85rem'}
@@ -78,23 +80,17 @@ export function RoomFullScreen({ theme, streams, setFullScreen, closeStream }) {
           direction="row"
           justify="space-between"
         >
-          <MinimizeButton
-            full={false}
-            onClick={toggleFullScreen}
-          >
+          <Button color="white" onClick={toggleFullScreen}>
             <Box direction="row" align="center">
               <Box marginRight="0.5rem">
-                <FiMinimize size="1.75rem" />
+                <FiMinimize color={theme.white} size="1.75rem" />
               </Box>
 
               <Typography color="white">Minimize</Typography>
             </Box>
-          </MinimizeButton>
+          </Button>
 
-          <EndCallButton
-            full={false}
-            onClick={handleEndCall}
-          >
+          <Button onClick={handleEndCall}>
             <Box direction="row" align="center">
               <Box marginRight="1rem">
                 <FiPhone color={theme.critical.main} size="1.75rem" />
@@ -104,7 +100,7 @@ export function RoomFullScreen({ theme, streams, setFullScreen, closeStream }) {
                 End call
               </Typography>
             </Box>
-          </EndCallButton>
+          </Button>
         </Box>
       )}
     </Box>
@@ -119,27 +115,3 @@ RoomFullScreen.propTypes = {
 };
 
 export default withTheme(RoomFullScreen);
-
-const buttonStyles = `
-  background: transparent;
-  opacity: 0.85;
-  font-size: 1.25rem;
-  border: none;
-  outline: none;
-  cursor: pointer;
-
-  &:hover {
-    background: transparent !important;
-    opacity: 1;
-  }
-`;
-
-const MinimizeButton = styled.button`
-  ${buttonStyles}
-
-  color: ${({ theme }) => theme.white};
-`;
-
-const EndCallButton = styled.button`
-  ${buttonStyles}
-`;

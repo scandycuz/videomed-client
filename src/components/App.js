@@ -3,7 +3,7 @@ import { Switch } from "react-router-dom";
 import PropTypes from 'prop-types';
 import Box from 'components/core/Box';
 import ProtectedRoute from 'components/core/ProtectedRoute';
-import VideoRoom from './VideoRoom';
+import Home from 'containers/Home';
 import Login from './Login';
 import Signup from './Signup';
 import Header from './Header';
@@ -12,30 +12,44 @@ class App extends Component {
 	static propTypes = {
 		token: PropTypes.string,
 		loggedIn: PropTypes.bool,
-		streams: PropTypes.object,
-		fullScreen: PropTypes.bool,
+		currentUser: PropTypes.object,
 		loading: PropTypes.bool,
 		error: PropTypes.string,
 		login: PropTypes.func.isRequired,
+		loginFromSession: PropTypes.func.isRequired,
+		logout: PropTypes.func.isRequired,
 		createAccount: PropTypes.func.isRequired,
-		setFullScreen: PropTypes.func.isRequired,
-		createStream: PropTypes.func.isRequired,
-		closeStream: PropTypes.func.isRequired,
-		inviteToRoom: PropTypes.func.isRequired,
 		resetSessionError: PropTypes.func.isRequired,
+		closeStream: PropTypes.func.isRequired,
+	}
+
+	componentDidMount() {
+		this.props.loginFromSession();
+	}
+
+	componentWillUnmount() {
+		this.props.closeStream();
 	}
 
 	render() {
+		/** placeholder for loading animation */
+		if (this.props.loading) return <div />;
+
 		return (
 			<Box>
-				<Header title="VideoMed" />
+				<Header
+					title="VideoMed"
+					loggedIn={this.props.loggedIn}
+					currentUser={this.props.currentUser}
+					logout={this.props.logout}
+				/>
 
 				<Switch>
 					<ProtectedRoute
 						exact
 						path="/login"
-						enabled={!this.props.loggedIn}
 						redirect="/"
+						enabled={!this.props.loggedIn}
 					>
 						<Login
 							loading={this.props.loading}
@@ -48,8 +62,8 @@ class App extends Component {
 					<ProtectedRoute
 						exact
 						path="/signup"
-						enabled={!this.props.loggedIn}
 						redirect="/"
+						enabled={!this.props.loggedIn}
 					>
 						<Signup
 							loading={this.props.loading}
@@ -59,15 +73,12 @@ class App extends Component {
 						/>
 					</ProtectedRoute>
 
-					<ProtectedRoute path="/" enabled={this.props.loggedIn}>
-						<VideoRoom
-							streams={this.props.streams}
-							fullScreen={this.props.fullScreen}
-							setFullScreen={this.props.setFullScreen}
-							createStream={this.props.createStream}
-							closeStream={this.props.closeStream}
-							inviteToRoom={this.props.inviteToRoom}
-						/>
+					<ProtectedRoute
+						path="/"
+						redirect="/login"
+						enabled={this.props.loggedIn}
+					>
+						<Home />
 					</ProtectedRoute>
 				</Switch>
 			</Box>

@@ -20,7 +20,13 @@ const API = {
     return await axios.get(`${protocol}${base}/users/current`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-  }
+  },
+
+  fetchUsers: async (token) => {
+    return await axios.get(`${protocol}${base}/current_user/users`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 }
 
 export default API;

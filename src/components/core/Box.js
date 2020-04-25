@@ -1,17 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { normalizeColor } from 'util/methods';
 
-const Styled = styled.div`
+const Box = styled.div`
   display: ${(props) => props.display || 'flex'};
+  z-index: ${(props) => props.zIndex};
   flex: ${(props) => props.flex && '1 1 auto'};
   position: ${(props) => props.position};
-  background: ${(props) => props.background};
+  background: ${(props) =>
+    props.background ? normalizeColor(props.theme, props.background) :
+    undefined};
   flex-direction: ${(props) => props.direction || props.flexDirection};
   justify-content: ${(props) => props.justify || props.justifyContent};
   align-items: ${(props) => props.align || props.alignItems};
   width: ${(props) => props.width};
+  min-width: ${(props) => props.minWidth};
   max-width: ${(props) => props.maxWidth};
+  min-height: ${(props) => props.minHeight};
   max-height: ${(props) => props.maxHeight};
   height: ${(props) => props.height};
   margin: ${(props) => props.margin};
@@ -33,39 +37,9 @@ const Styled = styled.div`
   border-bottom: ${({ theme, separator }) => separator === 'bottom' && `1px solid ${theme.grey.light}`};
   border-left: ${({ theme, separator }) => separator === 'left' && `1px solid ${theme.grey.light}`};
   border-radius: ${(props) => props.borderRadius};
+  box-shadow: ${(props) => props.boxShadow};
   overflow: ${(props) => props.overflow};
 `;
-
-function Box({ children, ...props }) {
-  return (
-    <Styled {...props}>
-      { children }
-    </Styled>
-  );
-}
-
-Box.propTypes = {
-  children: PropTypes.node,
-  position: PropTypes.string,
-  direction: PropTypes.string,
-  flexDirection: PropTypes.string,
-  justify: PropTypes.string,
-  justifyContent: PropTypes.string,
-  align: PropTypes.string,
-  alignItems: PropTypes.string,
-  width: PropTypes.string,
-  height: PropTypes.string,
-  margin: PropTypes.string,
-  marginTop: PropTypes.string,
-  marginBottom: PropTypes.string,
-  marginLeft: PropTypes.string,
-  marginRight: PropTypes.string,
-  padding: PropTypes.string,
-  paddingTop: PropTypes.string,
-  paddingBottom: PropTypes.string,
-  paddingLeft: PropTypes.string,
-  paddingRight: PropTypes.string,
-};
 
 Box.defaultProps = {
   direction: 'column',

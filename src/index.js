@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
+import { logout } from 'actions/session';
 import axios from 'axios';
 import store from 'store';
 import theme from 'theme';
@@ -15,6 +16,7 @@ axios.interceptors.response.use(response => {
 }, error => {
   if (error.response.status === 401) {
     window.sessionStorage.removeItem('token');
+    store.dispatch(logout());
   }
 
   return Promise.reject(error);

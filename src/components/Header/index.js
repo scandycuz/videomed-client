@@ -8,11 +8,18 @@ import Menu from './Menu';
 class Header extends Component {
   static propTypes = {
     title: PropTypes.string,
+    loggedIn: PropTypes.bool,
+    currentUser: PropTypes.object.isRequired,
+    logout: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    loggedIn: false,
   };
 
   render() {
     return (
-      <Container width="md">
+      <Container width={this.props.loggedIn ? 'lg' : 'md'}>
         <Box
           separator="bottom"
           padding="1rem"
@@ -27,7 +34,11 @@ class Header extends Component {
           </Box>
 
           <Box width="100%" align="flex-end">
-            <Menu />
+            <Menu
+              loggedIn={this.props.loggedIn}
+              currentUser={this.props.currentUser}
+              logout={this.props.logout}
+            />
           </Box>
         </Box>
       </Container>
