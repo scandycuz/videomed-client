@@ -28,7 +28,7 @@ module.exports = {
 			},
 			{
         test: /\.css$/i,
-        use: ['css-loader'],
+        use: ['style-loader', 'css-loader'],
       },
       {
 				test: /\.ejs$/, loader: 'ejs-loader?variable=data'

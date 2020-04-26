@@ -1,5 +1,8 @@
 import "regenerator-runtime/runtime.js";
 
+import 'assets/styles/normalize.css';
+import 'assets/styles/global.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from "react-router-dom";
