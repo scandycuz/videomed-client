@@ -1,29 +1,28 @@
 import axios from 'axios';
-import { protocol, base } from 'util/env';
 
 const API = {
   createSession: async (params) => {
-    return await axios.post(`${protocol}${base}/authenticate`, params);
+    return await axios.post(`${PROTOCOL}//${API_URL}/authenticate`, params);
   },
 
   createAccount: async (params) => {
-    return await axios.post(`${protocol}${base}/users`, params);
+    return await axios.post(`${PROTOCOL}//${API_URL}/users`, params);
   },
 
   fetchTwilioConfig: async (token) => {
-    return await axios.get(`${protocol}${base}/twilio`, {
+    return await axios.get(`${PROTOCOL}//${API_URL}/twilio`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   fetchCurrentUser: async (token) => {
-    return await axios.get(`${protocol}${base}/users/current`, {
+    return await axios.get(`${PROTOCOL}//${API_URL}/users/current`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
 
   fetchUsers: async (token) => {
-    return await axios.get(`${protocol}${base}/current_user/users`, {
+    return await axios.get(`${PROTOCOL}//${API_URL}/current_user/users`, {
       headers: { Authorization: `Bearer ${token}` },
     });
   },

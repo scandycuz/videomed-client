@@ -1,10 +1,12 @@
 const sslRedirect = require('heroku-ssl-redirect');
 const express = require('express');
 const path = require('path');
+const hsts = require('hsts');
 
 const app = express();
 
 app.use(sslRedirect());
+app.use(hsts({ maxAge: 15552000 }));
 
 app.use(express.static(path.join(__dirname, '/dist')));
 

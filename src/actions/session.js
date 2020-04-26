@@ -1,6 +1,5 @@
 import API from 'util/API';
 import Cable from 'util/Cable';
-import { protocol, base } from 'util/env';
 import { format, unformat } from 'util/methods';
 import { receiveMessage, closeStream } from 'actions/stream';
 import { getUsers } from 'actions/users';
@@ -106,7 +105,10 @@ export function connectWebsocket() {
   return async function(dispatch, getState) {
     const { token } = getState().session;
 
-    await Cable.initialize(`${protocol.replace('http', 'ws')}${base}/cable`, token);
+    await Cable.initialize(
+      `${PROTOCOL.replace('http', 'ws')}//${API_URL}/cable`,
+      token,
+    );
   }
 }
 
