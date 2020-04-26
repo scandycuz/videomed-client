@@ -11,6 +11,7 @@ module.exports = {
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
+        "PRODUCTION": "readonly",
         "PROTOCOL": "readonly",
         "API_URL": "readonly"
     },

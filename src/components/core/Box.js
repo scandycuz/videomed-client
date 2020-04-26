@@ -39,6 +39,7 @@ const Box = styled.div`
   border-radius: ${(props) => props.borderRadius};
   box-shadow: ${(props) => props.boxShadow};
   overflow: ${(props) => props.overflow};
+  transition: ${(props) => props.transition};
 `;
 
 Box.defaultProps = {

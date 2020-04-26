@@ -236,8 +236,8 @@ export class Signup extends Component {
 
                 <Box margin="0.75rem 0.75rem">
                   <Typography color="grey.dark">
-                    In order to create an account, please obtain an invite code
-                    by contacting us at <Link color="black.light" href="mailto:invite@videomed.app">
+                    If you do not have an invite code, please obtain one by
+                    contacting us at <Link color="black.light" href="mailto:invite@videomed.app">
                     <strong>invite@videomed.app</strong></Link>. We look forward to hearing from you!
                   </Typography>
                 </Box>

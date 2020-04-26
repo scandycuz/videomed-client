@@ -34,15 +34,29 @@ class App extends Component {
 	}
 
 	render() {
-		/** placeholder for loading animation */
-		if (this.props.loading) return (
-			<Box width="100%" align="center" marginTop="14.5rem">
-				<ClipLoader />
-			</Box>
-		);
-
 		return (
-			<Box minHeight="100vh" justify="space-between">
+			<Box
+				position="relative"
+				minHeight="100vh"
+				justify="space-between"
+			>
+				{ this.props.loading && (
+					<Box
+						position="absolute"
+						background="white"
+						align="center"
+						paddingTop="14.5rem"
+						zIndex="2000"
+						top="0"
+						right="0"
+						bottom="0"
+						left="0"
+						transition="all 100ms"
+					>
+						<ClipLoader />
+					</Box>
+				)}
+
 				<Box marginBottom="2rem">
 					<Header
 						title="VideoMed"

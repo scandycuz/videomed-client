@@ -12,6 +12,7 @@ module.exports = merge(common, {
     historyApiFallback: true,
   },
   plugins: [
+    new webpack.DefinePlugin({ PRODUCTION: JSON.stringify(false) }),
     new webpack.DefinePlugin({ PROTOCOL: JSON.stringify('http') }),
     new webpack.DefinePlugin({ API_URL: JSON.stringify('localhost:3000') }),
   ],

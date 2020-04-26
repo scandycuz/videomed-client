@@ -8,6 +8,7 @@ module.exports = merge(common, {
 		filename: '[name].[hash].bundle.js'
 	},
   plugins: [
+    new webpack.DefinePlugin({ PRODUCTION: JSON.stringify(true) }),
     new webpack.DefinePlugin({ PROTOCOL: JSON.stringify('https') }),
     new webpack.DefinePlugin({ API_URL: JSON.stringify(process.env.API_URL) }),
   ]
