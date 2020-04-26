@@ -26,6 +26,10 @@ module.exports = {
 					loader: 'babel-loader',
 				},
 			},
+			{
+        test: /\.css$/i,
+        use: ['css-loader'],
+      },
       {
 				test: /\.ejs$/, loader: 'ejs-loader?variable=data'
 			},
