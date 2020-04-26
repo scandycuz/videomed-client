@@ -12,7 +12,7 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			title: 'VideoWeb',
+			title: 'VideoMed',
 			template: './public/index.html',
 			favicon: './public/favicon.ico',
 		}),
