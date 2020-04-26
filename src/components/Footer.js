@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Container from 'components/core/Container';
 import Box from 'components/core/Box';
-import Link from 'components/core/Link';
 import Typography from 'components/core/Typography';
 
-export function Footer({ loggedIn, email }) {
+export function Footer({ loggedIn }) {
+  useEffect(() => {
+    const script = document.createElement("script");
+
+    script.src = "https://seal.godaddy.com/getSeal?sealID=PG4R0ZVnCjUA9qkQZnQ3VbeoaXnjL07mP2PbpUJMNNtgkeu5QksRu8maiRSd";
+    script.async = true;
+
+    document.body.appendChild(script);
+  }, []);
+
   return (
     <Box background="grey.light">
       <Container width={loggedIn ? 'lg' : 'md'}>
@@ -20,11 +28,7 @@ export function Footer({ loggedIn, email }) {
             &copy; 2020 VideoMed
           </Typography>
 
-          <Typography color="grey.dark" weight={300}>
-            <Link href={`mailto:${email}`}>
-              { email }
-            </Link>
-          </Typography>
+          <div id="siteseal" />
         </Box>
       </Container>
     </Box>
@@ -33,7 +37,6 @@ export function Footer({ loggedIn, email }) {
 
 Footer.propTypes = {
   loggedIn: PropTypes.bool,
-  email: PropTypes.string,
 };
 
 export default Footer;
