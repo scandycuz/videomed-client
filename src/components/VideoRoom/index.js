@@ -18,15 +18,27 @@ function VideoStream({
     <Box
       align="center"
       padding="1rem"
+      position="relative"
     >
-      { loading ? (
-        <Box marginTop="10rem">
+      { loading && (
+        <Box
+          position="absolute"
+          align="center"
+          top="0"
+          right="0"
+          bottom="0"
+          left="0"
+          zIndex="250"
+          background="white"
+          paddingTop="10rem"
+        >
           <PulseLoader
             color={theme.secondary.light}
             loading={loading}
           />
         </Box>
-      ) : fullScreen ? (
+      )}
+      { fullScreen ? (
         <RoomFullScreen
           streams={streams}
           closeStream={closeStream}

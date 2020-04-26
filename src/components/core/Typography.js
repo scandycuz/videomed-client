@@ -9,6 +9,7 @@ const StyledTypography = styled(Typography)`
   color: ${({ theme, color }) => color ? normalizeColor(theme, color) : theme.black.main};
   line-height: ${({ lineHeight }) => lineHeight || '1.45em'};
   font-size: ${({ size }) => size};
+  font-weight: ${({ weight}) => weight};
   text-align: ${({ align }) => align};
 `;
 

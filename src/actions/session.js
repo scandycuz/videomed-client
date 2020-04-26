@@ -63,12 +63,13 @@ export function onLogin() {
 }
 
 export function logout() {
-  return function(dispatch) {
+  return async function(dispatch) {
     dispatch(receiveSessionLoading(true));
 
     window.sessionStorage.removeItem('token');
 
-    dispatch(closeStream());
+    await dispatch(closeStream());
+    await Cable.disconnect();
     dispatch(receiveLogout());
 
     dispatch(receiveSessionLoading(false));

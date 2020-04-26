@@ -41,6 +41,10 @@ function Subscription(url, token, identifier, onMessage) {
     this.socket.send(JSON.stringify(payload));
   }
 
+  this.close = () => {
+    this.socket.close();
+  }
+
   const connect = () => {
     return new Promise((resolve, reject) => {
       this.socket = new WebSocket(`${url}?authorization=${token}`);
@@ -85,8 +89,8 @@ const Cable = {
 
   /**
    * Creates and stores a websocket subscription.
-   * @param  {object} identifier identifies the subscription
-   * @param  {[type]} onMessage  called when the websocket receives a message
+   * @param  {object}   identifier identifies the subscription
+   * @param  {function} onMessage  called when the websocket receives a message
    */
   subscribe: async function(identifier, onMessage) {
     const subscription = new Subscription(this.url, this.token, identifier, onMessage);
@@ -94,6 +98,14 @@ const Cable = {
 
     this.subscriptions.push(subscription);
   },
+
+  disconnect: async function() {
+    this.subscriptions.forEach((s) => {
+      s.close();
+    });
+
+    this.subscriptions = [];
+  }
 }
 
 export default Cable;

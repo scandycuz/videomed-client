@@ -6,15 +6,17 @@ module.exports = {
 	entry: './src/index.js',
 	output: {
 		path: path.join(__dirname, '/dist'),
-		filename: 'index_bundle.js'
 	},
 	resolve: {
 		modules: [path.resolve(__dirname, './src'), 'node_modules'],
 	},
-	devtool: 'source-map',
-	devServer: {
-    historyApiFallback: true,
-  },
+	plugins: [
+		new HtmlWebpackPlugin({
+			title: 'VideoWeb',
+			template: './public/index.html',
+			favicon: './public/favicon.ico',
+		}),
+	],
 	module: {
 		rules: [
 			{
@@ -22,13 +24,11 @@ module.exports = {
 				exclude: /node_modules/,
 				use: {
 					loader: 'babel-loader',
-				}
-			}
-		]
+				},
+			},
+      {
+				test: /\.ejs$/, loader: 'ejs-loader?variable=data'
+			},
+		],
 	},
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: './public/index.html'
-		})
-	]
-}
+};

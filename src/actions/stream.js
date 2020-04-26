@@ -1,5 +1,6 @@
 import Cable from 'util/Cable';
 import Stream from 'util/Stream';
+import { CONSTRAINTS } from 'util/constants';
 import {
   RECEIVE_STREAM,
   REMOVE_STREAM,
@@ -11,8 +12,6 @@ import {
   JOIN_ROOM,
   EXCHANGE,
 } from 'actions/types';
-
-const constraints = { audio: true, video: true };
 
 /**
  * Sends an invation to a user
@@ -26,7 +25,7 @@ export function inviteToRoom(userId) {
       const { currentUser } = session;
       const { streams } = stream;
 
-      if (!streams.self) await dispatch(createStream(constraints));
+      if (!streams.self) await dispatch(createStream(CONSTRAINTS));
 
       dispatch(receiveStreamLoading(true));
       setTimeout(() => {
@@ -55,8 +54,7 @@ export function joinRoom(from) {
     const { token, currentUser } = session;
     const { streams } = stream;
 
-    const localStream = streams.self || await dispatch(createStream(constraints));
-
+    const localStream = streams.self || await dispatch(createStream(CONSTRAINTS));
     const pc = await dispatch(createPC(token, localStream, true));
 
     const subscription = Cable.subscription({
@@ -84,7 +82,7 @@ export function handleExchange(data) {
     const { token, currentUser } = session;
     const { streams } = stream;
 
-    const localStream = streams.self || await dispatch(createStream(constraints));
+    const localStream = streams.self || await dispatch(createStream(CONSTRAINTS));
     const pc = stream.pc || await dispatch(createPC(token, localStream));
 
     dispatch(receiveParticipant(data.from));
@@ -153,15 +151,15 @@ export function handleNegotiationNeeded() {
 /**
  * Creates a media stream
  * and peer connection.
- * @param  {object} constraints video and audio constraints for the stream
+ * @param  {object} CONSTRAINTS video and audio CONSTRAINTS for the stream
  * @return {object}             created media stream
  */
-export function createStream(constraints) {
+export function createStream(CONSTRAINTS) {
   return async function(dispatch) {
     try {
       dispatch(receiveStreamLoading(true));
 
-      const localStream = await Stream.createStream(constraints);
+      const localStream = await Stream.createStream(CONSTRAINTS);
 
       dispatch(receiveStream(localStream, 'self'));
       dispatch(receiveStreamLoading(false));
