@@ -35,6 +35,10 @@ export class Signup extends Component {
     loading: false,
   };
 
+  componentDidMount() {
+    this.props.resetSessionError();
+  }
+
   state = {
     email: '',
     firstName: '',

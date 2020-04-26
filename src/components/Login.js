@@ -22,6 +22,10 @@ export class Login extends Component {
     loading: false,
   }
 
+  componentDidMount() {
+    this.props.resetSessionError();
+  }
+
   state = {
     email: '',
     password: '',

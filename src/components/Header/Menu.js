@@ -28,13 +28,13 @@ export function Menu({
           }]}
         />
       ) : (
-        <Button plain round>
-          <Link to={pathname === '/login' ? '/signup' : '/login'}>
+        <Link to={pathname === '/login' ? '/signup' : '/login'}>
+          <Button plain round>
             <Typography color="black.light">
               { pathname === '/login' ? 'Sign up' : 'Log in' }
             </Typography>
-          </Link>
-        </Button>
+          </Button>
+        </Link>
       )}
     </Box>
   );
