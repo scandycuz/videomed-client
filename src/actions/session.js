@@ -106,7 +106,7 @@ export function connectWebsocket() {
     const { token } = getState().session;
 
     await Cable.initialize(
-      `${PROTOCOL.replace('http', 'ws')}//${API_URL}/cable`,
+      `${PROTOCOL.replace('http', 'ws')}://${API_URL}/cable`,
       token,
     );
   }
