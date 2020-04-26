@@ -9,6 +9,6 @@ module.exports = merge(common, {
 	},
   plugins: [
     new webpack.DefinePlugin({ PROTOCOL: JSON.stringify('https') }),
-    new webpack.DefinePlugin({ API_URL: JSON.stringify('videomed-api.herokuapp.com') }),
+    new webpack.DefinePlugin({ API_URL: JSON.stringify(process.env.API_URL) }),
   ]
 });
