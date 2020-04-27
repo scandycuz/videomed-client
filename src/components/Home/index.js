@@ -16,7 +16,7 @@ export class Home extends Component {
     setFullScreen: PropTypes.func.isRequired,
     createStream: PropTypes.func.isRequired,
     closeStream: PropTypes.func.isRequired,
-    inviteToRoom: PropTypes.func.isRequired,
+    requestCall: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -25,8 +25,7 @@ export class Home extends Component {
   }
 
   startCall = async (userId) => {
-    await this.props.createStream({ audio: true, video: true });
-    this.props.inviteToRoom(userId);
+    this.props.requestCall(userId);
   }
 
   render() {

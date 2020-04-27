@@ -7,6 +7,7 @@ module.exports = merge(common, {
   output: {
 		filename: '[name].[hash].bundle.js'
 	},
+  devtool: 'source-map',
   plugins: [
     new webpack.DefinePlugin({ PRODUCTION: JSON.stringify(true) }),
     new webpack.DefinePlugin({ PROTOCOL: JSON.stringify('https') }),

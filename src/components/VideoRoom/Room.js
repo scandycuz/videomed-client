@@ -5,7 +5,7 @@ import Box from 'components/core/Box';
 import Button from 'components/core/Button';
 import Video from 'components/core/Video';
 import Typography from 'components/core/Typography';
-import Stream from 'util/Stream';
+import PeerConnection from 'util/PeerConnection';
 
 export function Room({ streams, setFullScreen, closeStream }) {
   const self = useRef();
@@ -14,8 +14,12 @@ export function Room({ streams, setFullScreen, closeStream }) {
   const alone = streams.self && !streams.guest;
 
   useEffect(() => {
-    if (streams.self) Stream.attachStream(self.current, streams.self);
-    if (streams.guest) Stream.attachStream(guest.current, streams.guest);
+    if (streams.self) {
+      PeerConnection.attachStream(self.current, streams.self);
+    }
+    if (streams.guest) {
+      PeerConnection.attachStream(guest.current, streams.guest);
+    }
   });
 
   function toggleFullScreen() {

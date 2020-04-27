@@ -3,7 +3,7 @@ import { logout } from 'actions/session';
 import {
   createStream,
   closeStream,
-  inviteToRoom,
+  requestCall,
   setFullScreen,
 } from 'actions/stream';
 import Home from 'components/Home';
@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logout()),
   createStream: (constraints) => dispatch(createStream(constraints)),
   closeStream: () => dispatch(closeStream()),
-  inviteToRoom: (userId) => dispatch(inviteToRoom(userId)),
+  requestCall: (userId) => dispatch(requestCall(userId)),
   setFullScreen: (status) => dispatch(setFullScreen(status)),
 });
 

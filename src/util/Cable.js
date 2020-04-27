@@ -50,6 +50,8 @@ function Subscription(url, token, identifier, onMessage) {
       this.socket = new WebSocket(`${url}?authorization=${token}`);
 
       this.socket.onopen = () => {
+        console.log('Actioncable connected');
+
         this.socket.onmessage = onMessage;
 
         resolve();
