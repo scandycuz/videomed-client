@@ -17,8 +17,8 @@ import {
 } from 'actions/types';
 
 /**
- * Sets the user up for a call and sends
- * a request to another user
+ * Sets the user up for a call and
+ * sends a request to another user.
  * @param {number} userId identifer for the peer
  */
 export function requestCall(userId) {
