@@ -41,7 +41,11 @@ export function PasswordInput({
       />
 
       <Box padding="0 0.5rem" marginTop="2px">
-        <StyledButton plain onClick={toggleVisible}>
+        <StyledButton
+          plain
+          tabIndex="-1"
+          onClick={toggleVisible}
+        >
           <Icon size="1.5rem" color={theme.black.light} />
         </StyledButton>
       </Box>

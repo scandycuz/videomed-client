@@ -6,13 +6,13 @@ import {
   RECEIVE_PARTICIPANT,
   RECEIVE_FULL_SCREEN,
   RECEIVE_STREAM_LOADING,
-  RECEIVE_OFFER_STATUS,
-  RECEIVE_POLITE_STATUS,
+  RECEIVE_STREAM_PENDING,
 } from 'actions/types';
 
 const nullState = {
   streams: {},
   pc: null,
+  pending: false,
   participant: null,
   makingOffer: false,
   polite: false,
@@ -60,16 +60,11 @@ const stream = (state = nullState, action) => {
         ...state,
         fullScreen: action.status,
       };
-    case RECEIVE_OFFER_STATUS:
+    case RECEIVE_STREAM_PENDING:
       return {
         ...state,
-        makingOffer: action.status,
-      }
-    case RECEIVE_POLITE_STATUS  :
-      return {
-        ...state,
-        polite: action.status,
-      }
+        pending: action.pending,
+      };
     case RECEIVE_STREAM_LOADING:
       return {
         ...state,

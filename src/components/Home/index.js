@@ -1,22 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withTheme } from 'styled-components';
+import PulseLoader from "react-spinners/PulseLoader";
 import Box from 'components/core/Box';
+import Dialog from 'components/core/Dialog';
 import Typography from 'components/core/Typography';
 import VideoRoom from 'components/VideoRoom';
 import Users from 'components/Users';
 import Code from './Code';
+import ShakingPhone from './ShakingPhone';
 
 export class Home extends Component {
   static propTypes = {
+    theme: PropTypes.object.isRequired,
     users: PropTypes.array,
     currentUser: PropTypes.object,
     streams: PropTypes.object,
     fullScreen: PropTypes.bool,
     loading: PropTypes.bool,
+    pending: PropTypes.bool,
+    from: PropTypes.number,
     setFullScreen: PropTypes.func.isRequired,
     createStream: PropTypes.func.isRequired,
     closeStream: PropTypes.func.isRequired,
     requestCall: PropTypes.func.isRequired,
+    acceptCall: PropTypes.func.isRequired,
+    rejectCall: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -29,8 +38,52 @@ export class Home extends Component {
   }
 
   render() {
+    const prefix = this.props.currentUser.type === 'Patient' ? 'Dr. ' : '';
+    const user = this.props.from &&
+      this.props.users.find((u) => u.id === this.props.from);
+
     return (
       <Box align="center">
+        { this.props.pending && user && (
+          <Dialog
+            onSuccess={this.props.acceptCall}
+            onReject={this.props.rejectCall}
+          >
+            <Box
+              direction="row"
+              align="center"
+              paddingLeft="0.25rem"
+            >
+              <Box marginRight="1rem">
+                <ShakingPhone size="2rem" color={this.props.theme.black.light}/>
+              </Box>
+
+              <Typography size="1.25rem">
+                Accept call from {prefix}{user.firstName} {user.lastName}?
+              </Typography>
+            </Box>
+          </Dialog>
+        )}
+
+        { this.props.loading && (
+          <Box
+            position="absolute"
+            align="center"
+            top="0"
+            right="0"
+            bottom="0"
+            left="0"
+            zIndex="5000"
+            background="white"
+            paddingTop="10rem"
+          >
+            <PulseLoader
+              color={this.props.theme.secondary.light}
+              loading
+            />
+          </Box>
+        )}
+
         { this.props.streams.self ? (
           <VideoRoom
             loading={this.props.loading}
@@ -96,4 +149,4 @@ export class Home extends Component {
   }
 }
 
-export default Home;
+export default withTheme(Home);

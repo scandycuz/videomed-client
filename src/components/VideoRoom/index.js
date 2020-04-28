@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withTheme } from 'styled-components';
 import Box from 'components/core/Box';
-import PulseLoader from "react-spinners/PulseLoader";
 import Room from './Room';
 import RoomFullScreen from './RoomFullScreen';
 
 function VideoStream({
-  theme,
   streams,
-  loading,
   fullScreen,
   closeStream,
   setFullScreen,
@@ -20,24 +16,6 @@ function VideoStream({
       padding="1rem"
       position="relative"
     >
-      { loading && (
-        <Box
-          position="absolute"
-          align="center"
-          top="0"
-          right="0"
-          bottom="0"
-          left="0"
-          zIndex="250"
-          background="white"
-          paddingTop="10rem"
-        >
-          <PulseLoader
-            color={theme.secondary.light}
-            loading={loading}
-          />
-        </Box>
-      )}
       { fullScreen ? (
         <RoomFullScreen
           streams={streams}
@@ -64,4 +42,4 @@ VideoStream.propTypes = {
   closeStream: PropTypes.func.isRequired,
 };
 
-export default withTheme(VideoStream);
+export default VideoStream;

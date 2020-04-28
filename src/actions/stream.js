@@ -8,13 +8,22 @@ import {
   RECEIVE_PARTICIPANT,
   RECEIVE_FULL_SCREEN,
   RECEIVE_STREAM_LOADING,
-  RECEIVE_OFFER_STATUS,
-  RECEIVE_POLITE_STATUS,
+  RECEIVE_STREAM_PENDING,
   REQUEST_CALL,
-  ACCEPT_CALL,
+  ANSWER_CALL,
   JOIN_CALL,
   EXCHANGE,
 } from 'actions/types';
+
+/**
+ * INIT SEQUENCE:
+ * p1 requests call
+ * p2 rejects or accepts call
+ * if p2 accepts call, creates pc and sends local desc to p1
+ * p1 creates pc, stores remote desc and sends local desc to p2
+ * p2 stores remote description
+ * call is initiated
+**/
 
 /**
  * Sets the user up for a call and
@@ -55,17 +64,37 @@ export function requestCall(userId) {
   }
 }
 
+export function answerCall(data) {
+  return async function(dispatch) {
+    dispatch(receiveStreamPending(true));
+    dispatch(receiveParticipant(data.from));
+  }
+}
+
+export function rejectCall() {
+  return function(dispatch) {
+    dispatch(receiveStreamPending(false));
+    dispatch(receiveStreamLoading(false));
+    dispatch(closeStream());
+  }
+}
+
 /**
  * Accepts an incoming call, sets up
  * the peer connection, and sends the
  * description back to the requester.
  * @param {object} data information for the incoming call request
  */
-export function acceptCall(data) {
+export function acceptCall() {
   return async function(dispatch, getState) {
     const { currentUser } = getState().session;
+    const from = getState().stream.participant;
 
-    dispatch(receiveParticipant(data.from));
+    dispatch(receiveStreamLoading(true));
+    setTimeout(() => {
+      dispatch(receiveStreamLoading(false));
+    }, 4000);
+    dispatch(receiveStreamPending(false));
 
     console.log('creating peer connection');
     const pc = await dispatch(createPeerConnection());
@@ -78,7 +107,7 @@ export function acceptCall(data) {
       pc.addTrack(track, stream);
     }
 
-    // candidates will start coming, but everyone has a pc so its ok
+    // ice candidates will start coming, but everyone has a pc so its ok
     console.log('setting local description');
     await pc.setLocalDescription();
 
@@ -89,9 +118,9 @@ export function acceptCall(data) {
     });
 
     subscription.send('create', {
-      type: ACCEPT_CALL,
+      type: ANSWER_CALL,
       from: currentUser.id,
-      to: data.from,
+      to: from,
       sdp: JSON.stringify(pc.localDescription),
     });
   }
@@ -271,7 +300,7 @@ export function closeStream() {
     } catch(e) {
       console.error(e);
     } finally {
-      receiveStreamLoading(false);
+      dispatch(receiveStreamLoading(false));
     }
   }
 }
@@ -283,11 +312,17 @@ export function closeStream() {
  */
 export function stopStream(user) {
   return function(dispatch, getState) {
-    console.log('stopping guest stream');
     const { streams } = getState().stream;
-    PeerConnection.stopStream(streams[user]);
+
+    if (streams[user]) {
+      console.log('peer has ended the stream');
+      PeerConnection.stopStream(streams[user]);
+    } else {
+      console.log('peer has rejected request');
+    }
 
     dispatch(removeStream());
+    dispatch(receiveStreamLoading(false));
   }
 }
 
@@ -300,8 +335,8 @@ export function receiveMessage(message) {
     switch(message.type) {
       case REQUEST_CALL:
         console.log('accepting call');
-        return dispatch(acceptCall(message));
-      case ACCEPT_CALL:
+        return dispatch(answerCall(message));
+      case ANSWER_CALL:
         console.log('joining call');
         return dispatch(joinCall(message));
       case JOIN_CALL:
@@ -358,6 +393,13 @@ export function endtream(user) {
   };
 }
 
+export function receiveStreamPending(pending) {
+  return {
+    type: RECEIVE_STREAM_PENDING,
+    pending,
+  };
+}
+
 export function receivePeerConnection(pc) {
   return {
     type: RECEIVE_PEER_CONNECTION,
@@ -395,19 +437,5 @@ export function receiveStreamLoading(loading) {
   return {
     type: RECEIVE_STREAM_LOADING,
     loading,
-  };
-}
-
-export function setOfferStatus(status) {
-  return {
-    type: RECEIVE_OFFER_STATUS,
-    status,
-  };
-}
-
-export function setPoliteness(status) {
-  return {
-    type: RECEIVE_POLITE_STATUS,
-    status,
   };
 }
