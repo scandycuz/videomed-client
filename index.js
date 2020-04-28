@@ -2,9 +2,13 @@ const sslRedirect = require('heroku-ssl-redirect');
 const express = require('express');
 const path = require('path');
 const hsts = require('hsts');
+const compression = require('compression');
 
 const app = express();
 
+app.use(compression());
+
+app.disable('x-powered-by');
 app.use(sslRedirect());
 app.use(hsts({ maxAge: 15552000 }));
 
