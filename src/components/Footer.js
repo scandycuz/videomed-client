@@ -16,9 +16,9 @@ export function Footer({ loggedIn }) {
 
   return (
     <Box background="grey.light">
-      <Container width={loggedIn ? '54rem' : '46rem'}>
+      <Container width={loggedIn ? '54rem' : '48rem'}>
         <Box
-          padding="1.5rem 2rem 1.5rem"
+          padding="1.5rem 2.5rem 1.5rem"
           direction="row"
 
           justify="space-between"

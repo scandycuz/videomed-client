@@ -50,7 +50,7 @@ export class Login extends Component {
   render() {
     return (
       <Box marginTop="3rem">
-        <Container width="46rem">
+        <Container width="48rem">
           <Box
             width="100%"
             direction="row"
@@ -63,8 +63,9 @@ export class Login extends Component {
             >
               <Box marginLeft="0.5rem" marginBottom="1rem">
                 <Typography size="1.2rem" weight={300}>
-                  VideoMed is a free, secure, and HIPAA compliant telemedicine app designed to help physicians
-                  interact with patients during the Covid-19 pandemic.
+                  VideoMed is a free and secure telemedicine app designed to
+                  help physicians interact with patients during the Covid-19
+                  pandemic.
                 </Typography>
               </Box>
 

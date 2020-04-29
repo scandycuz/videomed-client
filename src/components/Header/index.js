@@ -20,9 +20,9 @@ class Header extends Component {
   render() {
     return (
       <Box separator="bottom">
-        <Container width={this.props.loggedIn ? '54rem' : '46rem'}>
+        <Container width={this.props.loggedIn ? '54rem' : '48rem'}>
           <Box
-            padding="1rem 0.75rem"
+            padding="1rem 1rem"
             direction="row"
             justify="space-between"
             align="center"
