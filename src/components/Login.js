@@ -90,7 +90,7 @@ export class Login extends Component {
                   <ImageBox
                     src={peerToPeer}
                     alt="desc"
-                    title="Peer to Peer connection between two users, no third parties."
+                    title="Peer-to-peer connection between two users, no third parties."
                   />
                 </Box>
               </Box>
