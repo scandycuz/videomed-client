@@ -63,7 +63,7 @@ export class Login extends Component {
             >
               <Box marginLeft="0.5rem" marginBottom="1rem">
                 <Typography size="1.2rem" weight={300}>
-                  VideoMed is a free and secure telemedicine app designed to
+                  VideoMed is a free and secure telemedicine tool designed to
                   help physicians interact with patients during the Covid-19
                   pandemic.
                 </Typography>
