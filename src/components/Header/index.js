@@ -19,29 +19,33 @@ class Header extends Component {
 
   render() {
     return (
-      <Container width={this.props.loggedIn ? 'lg' : 'md'}>
-        <Box
-          separator="bottom"
-          padding="1rem"
-          direction="row"
-          justify="space-between"
-          align="center"
-        >
-          <Box width="100%" />
+      <Box separator="bottom">
+        <Container width={this.props.loggedIn ? '54rem' : '46rem'}>
+          <Box
+            padding="1rem 0.75rem"
+            direction="row"
+            justify="space-between"
+            align="center"
+          >
+            { this.props.loggedIn &&<Box width="100%" /> }
 
-          <Box width="100%" align="center">
-            <Typography as="h1">{ this.props.title }</Typography>
-          </Box>
+            <Box
+              width="100%"
+              align={this.props.loggedIn ? 'center' : 'flex-start'}
+            >
+              <Typography as="h1">{ this.props.title }</Typography>
+            </Box>
 
-          <Box width="100%" align="flex-end" zIndex={1000}>
-            <Menu
-              loggedIn={this.props.loggedIn}
-              currentUser={this.props.currentUser}
-              logout={this.props.logout}
-            />
+            <Box width="100%" align="flex-end" zIndex={1000}>
+              <Menu
+                loggedIn={this.props.loggedIn}
+                currentUser={this.props.currentUser}
+                logout={this.props.logout}
+              />
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
     );
   }
 }

@@ -142,7 +142,7 @@ export class Signup extends Component {
 
   render() {
     return (
-      <Container width="sm">
+      <Container width="36rem">
         <Box width="100%" marginTop="6rem" align="center">
           { this.state.success ? (
             <Container width="xs">

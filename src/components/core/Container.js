@@ -13,7 +13,7 @@ export function Container({ width, children }) {
 
   return (
     <Box
-      maxWidth={widths[width]}
+      maxWidth={widths[width] || width}
       width="100%"
       marginLeft="auto"
       marginRight="auto"
@@ -24,7 +24,7 @@ export function Container({ width, children }) {
 }
 
 Container.propTypes = {
-  width: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
+  width: PropTypes.string,
   children: PropTypes.node,
 };
 

@@ -9,6 +9,10 @@ import Button from 'components/core/Button';
 import Link from 'components/core/Link';
 import Form from 'components/core/Form';
 import Field from 'components/core/Field';
+import ImageBox from 'components/core/ImageBox';
+import authorization from 'assets/images/authorization.png';
+import noDataStorage from 'assets/images/no-data-storage.png';
+import peerToPeer from 'assets/images/peer-to-peer.png';
 
 export class Login extends Component {
   static propTypes = {
@@ -45,62 +49,113 @@ export class Login extends Component {
 
   render() {
     return (
-      <Container width="xs">
-        <Box width="100%" marginTop="6rem" align="center">
-          <Form onSubmit={this.handleSubmit}>
-            <Box>
-              <Box marginBottom="1rem">
-                <Field>
-                  <TextInput
-                    name="email"
-                    placeholder="Email"
-                    value={this.state.email}
-                    onChange={this.handleChange}
-                  />
-                </Field>
+      <Box marginTop="3rem">
+        <Container width="46rem">
+          <Box
+            width="100%"
+            direction="row"
+          >
+            <Box
+              width="52.5%"
+              marginTop="1rem"
+              marginRight="2rem"
+              paddingRight="1rem"
+            >
+              <Box marginLeft="0.5rem" marginBottom="1rem">
+                <Typography size="1.2rem" weight={300}>
+                  VideoMed is a free, secure, and HIPAA compliant telemedicine app designed to help physicians
+                  interact with patients during the Covid-19 pandemic.
+                </Typography>
               </Box>
 
-              <Box marginBottom="1rem">
-                <Field>
-                  <PasswordInput
-                    name="password"
-                    placeholder="Password"
-                    value={this.state.password}
-                    onChange={this.handleChange}
+              <Box align="flex-start" justify="flex-start">
+                <Box marginBottom="1rem">
+                  <ImageBox
+                    src={authorization}
+                    alt="SSL encryption and token authentication"
+                    title="Enforced SSL encryption and user authentication."
                   />
-                </Field>
-              </Box>
-
-              { this.props.error && (
-                <Box marginTop="-0.25rem" marginBottom="0.5rem" align="center">
-                  <Typography color="critical">
-                    { this.props.error }
-                  </Typography>
                 </Box>
-              )}
 
-              <Button
-                disabled={this.props.loading}
-                type="submit"
-              >
-                Log in
-              </Button>
-            </Box>
-          </Form>
+                <Box marginBottom="1rem">
+                  <ImageBox
+                    src={noDataStorage}
+                    alt="no stored data."
+                    title="No data is ever stored."
+                  />
+                </Box>
 
-          <Box marginTop="1.5rem" width="100%">
-            <Typography size="1.1rem" color="black.light" align="center">
-              Don&apos;t have an account?
-
-              <Box display="inline" marginLeft="0.5rem">
-                <Link color="black" to="/signup">
-                  <strong>Sign up</strong>
-                </Link>
+                <Box marginBottom="1rem">
+                  <ImageBox
+                    src={peerToPeer}
+                    alt="desc"
+                    title="Peer to Peer connection between two users, no third parties."
+                  />
+                </Box>
               </Box>
-            </Typography>
+            </Box>
+
+            <Box
+              width="47.5%"
+              marginLeft="1rem"
+              marginTop="3rem"
+            >
+              <Form onSubmit={this.handleSubmit}>
+                <Box>
+                  <Box marginBottom="1rem">
+                    <Field>
+                      <TextInput
+                        name="email"
+                        placeholder="Email"
+                        value={this.state.email}
+                        onChange={this.handleChange}
+                      />
+                    </Field>
+                  </Box>
+
+                  <Box marginBottom="1rem">
+                    <Field>
+                      <PasswordInput
+                        name="password"
+                        placeholder="Password"
+                        value={this.state.password}
+                        onChange={this.handleChange}
+                      />
+                    </Field>
+                  </Box>
+
+                  { this.props.error && (
+                    <Box marginTop="-0.25rem" marginBottom="0.5rem" align="center">
+                      <Typography color="critical">
+                        { this.props.error }
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <Button
+                    disabled={this.props.loading}
+                    type="submit"
+                  >
+                    Log in
+                  </Button>
+                </Box>
+              </Form>
+
+              <Box marginTop="1.5rem" width="100%">
+                <Typography size="1.1rem" color="black.light" align="center">
+                  Don&apos;t have an account?
+
+                  <Box display="inline" marginLeft="0.5rem">
+                    <Link color="black" to="/signup">
+                      <strong>Sign up</strong>
+                    </Link>
+                  </Box>
+                </Typography>
+              </Box>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      </Box>
     );
   }
 }
