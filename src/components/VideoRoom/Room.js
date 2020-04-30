@@ -42,7 +42,7 @@ export function Room({ streams, setFullScreen, closeStream }) {
             ref={self}
             autoPlay
             muted
-            playsinline
+            playsInline
           />
         </Box>
 
@@ -55,7 +55,7 @@ export function Room({ streams, setFullScreen, closeStream }) {
           <Video
             ref={guest}
             autoPlay
-            playsinline
+            playsInline
           />
         </Box>
       </Box>
