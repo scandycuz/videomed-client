@@ -113,7 +113,8 @@ export function acceptCall() {
 
     // ice candidates will start coming, but everyone has a pc so its ok
     console.log('setting local description');
-    await pc.setLocalDescription();
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
 
     console.log('sending acceptance and local description to peer');
     const subscription = Cable.subscription({
@@ -148,7 +149,8 @@ export function joinCall(data) {
     console.log('setting remote description');
     await pc.setRemoteDescription(sdp);
     console.log('setting local description');
-    await pc.setLocalDescription();
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
 
     console.log('sending acceptance and local description to peer');
     const subscription = Cable.subscription({
