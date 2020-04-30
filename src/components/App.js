@@ -9,12 +9,14 @@ import Login from './Login';
 import Signup from './Signup';
 import Header from './Header';
 import Footer from './Footer';
+import GlobalMessages from './GlobalMessages';
 
 class App extends Component {
 	static propTypes = {
 		token: PropTypes.string,
 		loggedIn: PropTypes.bool,
 		currentUser: PropTypes.object,
+		messages: PropTypes.array,
 		loading: PropTypes.bool,
 		error: PropTypes.string,
 		login: PropTypes.func.isRequired,
@@ -107,6 +109,10 @@ class App extends Component {
 				<Footer
 					loggedIn={this.props.loggedIn}
 					email="support@videomed.app"
+				/>
+
+				<GlobalMessages
+					messages={this.props.messages}
 				/>
 			</Box>
 		);

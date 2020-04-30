@@ -55,6 +55,7 @@ RadioButton.defaultProps = {
 const PlainButton = styled.button`
   outline: none;
   border: none;
+  background: transparent;
   display: flex;
   align-items: center;
 `;

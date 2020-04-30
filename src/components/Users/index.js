@@ -11,7 +11,7 @@ const Wrapper = styled(Box)`
   height: 100%;
 `;
 
-export function Users({ users, onClick }) {
+export function Users({ users, onlineStatus, onClick }) {
   return (
     <Wrapper>
       <Box>
@@ -22,6 +22,7 @@ export function Users({ users, onClick }) {
               marginBottom={idx === users.length - 1 ? 0 : '0.75rem'}
             >
               <User
+                status={onlineStatus[user.id]}
                 onClick={onClick}
                 {...user}
               />
@@ -35,6 +36,7 @@ export function Users({ users, onClick }) {
 
 Users.propTypes = {
   users: PropTypes.array.isRequired,
+  onlineStatus: PropTypes.object.isRequired,
   onClick: PropTypes.func,
 }
 

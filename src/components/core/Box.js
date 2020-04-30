@@ -40,6 +40,7 @@ const Box = styled.div`
   box-shadow: ${(props) => props.boxShadow};
   overflow: ${(props) => props.overflow};
   transition: ${(props) => props.transition};
+  pointer-events: ${(props) => props.pointerEvents};
 `;
 
 Box.defaultProps = {

@@ -14,6 +14,7 @@ export class Home extends Component {
   static propTypes = {
     theme: PropTypes.object.isRequired,
     users: PropTypes.array,
+    onlineStatus: PropTypes.object,
     currentUser: PropTypes.object,
     streams: PropTypes.object,
     fullScreen: PropTypes.bool,
@@ -127,6 +128,7 @@ export class Home extends Component {
               ) : (
                 <Users
                   users={this.props.users}
+                  onlineStatus={this.props.onlineStatus}
                   onClick={ this.props.currentUser.type === 'Physician' ? this.startCall : undefined}
                 />
               )}

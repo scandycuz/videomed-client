@@ -1,6 +1,10 @@
 import Cable from 'util/Cable';
 import PeerConnection from 'util/PeerConnection';
+import { receiveOnlineStatus } from 'actions/users';
+import { format } from 'util/methods';
+import { receiveGlobalMessage, removeGlobalMessage } from 'actions/app';
 import {
+  RECEIVE_ONLINE_STATUS,
   RECEIVE_STREAM,
   REMOVE_STREAM,
   END_STREAM,
@@ -312,13 +316,23 @@ export function closeStream() {
  */
 export function stopStream(user) {
   return function(dispatch, getState) {
-    const { streams } = getState().stream;
+    const state = getState();
+    const { streams, participant } = state.stream;
+    const { currentUser } = state.session;
 
     if (streams[user]) {
-      console.log('peer has ended the stream');
+      const prefix = currentUser.type === 'Patient' ? 'Dr. ' : '';
+      const { firstName, lastName } = state.users.users.find(({ id }) => {
+        return id === participant;
+      });
+
+      dispatch(displayGlobalMessage({
+        body: `${prefix}${firstName} ${lastName} has ended the call.`
+      }));
+
       PeerConnection.stopStream(streams[user]);
     } else {
-      console.log('peer has rejected request');
+      dispatch(displayGlobalMessage({ body: 'The call was declined.' }));
     }
 
     dispatch(removeStream());
@@ -348,6 +362,9 @@ export function receiveMessage(message) {
       case REMOVE_STREAM:
         console.log('removing guest stream')
         return dispatch(stopStream('guest'));
+      case RECEIVE_ONLINE_STATUS:
+        console.log('receiving user online status');
+        return dispatch(receiveOnlineStatus(format(message.online_status)));
       default:
         return;
     }
@@ -375,6 +392,15 @@ function handleIceCandidate(event) {
     } else {
       dispatch(receiveStreamLoading(false));
     }
+  }
+}
+
+export function displayGlobalMessage(message, timeout = 6000) {
+  return function(dispatch) {
+    dispatch(receiveGlobalMessage(message));
+    setTimeout(() => {
+      dispatch(removeGlobalMessage());
+    }, timeout);
   }
 }
 

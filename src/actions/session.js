@@ -2,7 +2,7 @@ import API from 'util/API';
 import Cable from 'util/Cable';
 import { format, unformat } from 'util/methods';
 import { receiveMessage, closeStream } from 'actions/stream';
-import { getUsers } from 'actions/users';
+import { getUsers, getOnlineStatuses } from 'actions/users';
 import Error from 'util/Error';
 import {
   RECEIVE_AUTH_TOKEN,
@@ -53,10 +53,12 @@ export function onLogin() {
   return async function(dispatch) {
     await dispatch(getCurrentUser());
 
-    await dispatch(getUsers());
+    await Promise.all([
+      dispatch(getUsers()),
+      dispatch(getOnlineStatuses()),
+    ]);
 
     await dispatch(connectWebsocket());
-
     await dispatch(subscribeToSessions());
   }
 }

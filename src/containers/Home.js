@@ -18,6 +18,7 @@ const mapStateToProps = ({ session, stream, users, app }) => ({
   pending: stream.pending,
   from: stream.participant,
   users: users.users,
+  onlineStatus: users.onlineStatus,
   error: app.error,
 });
 

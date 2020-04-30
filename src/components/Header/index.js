@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Box from 'components/core/Box';
 import Typography from 'components/core/Typography';
 import Container from 'components/core/Container';
+import Link from 'components/core/Link';
 import Menu from './Menu';
 
 class Header extends Component {
@@ -33,7 +34,9 @@ class Header extends Component {
               width="100%"
               align={this.props.loggedIn ? 'center' : 'flex-start'}
             >
-              <Typography as="h1">{ this.props.title }</Typography>
+              <Link to="/login">
+                <Typography as="h1">{ this.props.title }</Typography>
+              </Link>
             </Box>
 
             <Box width="100%" align="flex-end" zIndex={1000}>

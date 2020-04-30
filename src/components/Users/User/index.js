@@ -5,6 +5,7 @@ import { FiVideo } from 'react-icons/fi';
 import Box from 'components/core/Box';
 import Button from 'components/core/Button/Base';
 import Typography from 'components/core/Typography';
+import OnlineIndicator from './OnlineIndicator';
 import Profile from './Profile';
 
 const Wrapper = styled(Box)`
@@ -18,6 +19,7 @@ const Wrapper = styled(Box)`
 export function User({
   theme,
   id,
+  status,
   firstName,
   lastName,
   email,
@@ -26,6 +28,8 @@ export function User({
   type,
   onClick,
 }) {
+  const isPhysician = type === 'Physician';
+
   return (
     <Wrapper>
       <Box with="100%" marginRight="1rem">
@@ -35,12 +39,18 @@ export function User({
       <Box width="100%">
         <Box align="flex-start">
           <Typography size="1.1rem" as="h5">
-            { type === 'Physician' ? 'Dr.' : ''} { firstName } { lastName }
+            { isPhysician ? 'Dr.' : ''} { firstName } { lastName }
           </Typography>
           <Typography size="1.1rem">{ email }</Typography>
           { phone && <Typography size="1.1rem">{ phone }</Typography> }
           { company && <Typography size="1.1rem">{ company }</Typography> }
         </Box>
+
+        { !isPhysician && (
+          <Box marginTop="0.1rem">
+            <OnlineIndicator status={status} />
+          </Box>
+        )}
       </Box>
 
       { onClick && (
@@ -59,6 +69,7 @@ export function User({
 User.propTypes = {
   theme: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
+  status: PropTypes.string,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,

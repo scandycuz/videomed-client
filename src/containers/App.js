@@ -9,10 +9,11 @@ import {
 } from 'actions/session';
 import App from 'components/App';
 
-const mapStateToProps = ({ session }) => ({
+const mapStateToProps = ({ session, app }) => ({
   token: session.token,
   loggedIn: !!session.token,
   currentUser: session.currentUser,
+  messages: app.messages,
   loading: session.loading,
   error: session.error,
 });

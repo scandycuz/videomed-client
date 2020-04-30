@@ -42,6 +42,14 @@ export function unformat(data) {
   return result;
 }
 
+export function asObject(records, id, field) {
+  return records.reduce((obj, record) => {
+    obj[record[id]] = field ? record[field] : record;
+
+    return obj;
+  }, {});
+}
+
 export function normalizeColor(theme, color) {
   const colors = color.split('.');
 

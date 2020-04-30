@@ -2,13 +2,14 @@
  * Creates an instance of a
  * Websocket subscription.
  * @param {string}   url        url for the Actioncable connection
- * @param {string}   token      authorizatio token
+ * @param {string}   token      authorization token
  * @param {object}   identifier identifies the subscription
  * @param {function} onMessage  called when a message is received
  */
 function Subscription(url, token, identifier, onMessage) {
   this.identifier = identifier;
   this.socket = null;
+  this.pinging = null;
 
   /**
    * Connects the websocket and
@@ -22,7 +23,11 @@ function Subscription(url, token, identifier, onMessage) {
       identifier: JSON.stringify(this.identifier),
     };
 
-    this.socket.send(JSON.stringify(payload));
+    await this.socket.send(JSON.stringify(payload));
+
+    this.pinging = setInterval(() => {
+      this.ping();
+    }, 60000);
   }
 
   /**
@@ -32,7 +37,7 @@ function Subscription(url, token, identifier, onMessage) {
    * @param  {object} content data for the request
    */
   this.send = async (action, content) => {
-    if (!this.connected) await this.connect();
+    if (!this.connected) await this.initialize();
 
     const payload = {
       command: 'message',
@@ -41,6 +46,10 @@ function Subscription(url, token, identifier, onMessage) {
     }
 
     this.socket.send(JSON.stringify(payload));
+  }
+
+  this.ping = async () => {
+    this.send('ping');
   }
 
   this.close = () => {
@@ -109,6 +118,7 @@ const Cable = {
 
   disconnect: async function() {
     this.subscriptions.forEach((s) => {
+      clearInterval(s.pinging);
       s.close();
     });
 
