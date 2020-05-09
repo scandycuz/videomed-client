@@ -5,17 +5,7 @@ import { FiVideo, FiMessageCircle } from 'react-icons/fi';
 import Box from 'components/core/Box';
 import Button from 'components/core/Button/Icon';
 import Badge from 'components/core/Badge';
-import Typography from 'components/core/Typography';
-import OnlineIndicator from './OnlineIndicator';
-import Profile from './Profile';
-
-const Wrapper = styled(Box)`
-  border-radius: 1.25rem;
-  flex-direction: row;
-  align-items: center;
-  padding: 1.5rem;
-  background: ${({ theme }) => theme.white};
-`;
+import UserInfo from './UserInfo';
 
 export function User({
   theme,
@@ -32,51 +22,44 @@ export function User({
   startCall,
 }) {
   const isPhysician = type === 'Physician';
+  const prefix = isPhysician ? 'Dr. ' : '';
 
   return (
     <Wrapper>
-      <Box with="100%" marginRight="1rem">
-        <Profile firstName={firstName} lastName={lastName} />
-      </Box>
+      <UserInfo
+        status={status}
+        prefix={prefix}
+        firstName={firstName}
+        lastName={lastName}
+        email={email}
+        phone={phone}
+        company={company}
+        type={type}
+      />
 
-      <Box width="100%">
-        <Box align="flex-start">
-          <Typography size="1.1rem" as="h5">
-            { isPhysician ? 'Dr.' : ''} { firstName } { lastName }
-          </Typography>
-          <Typography size="1.1rem">{ email }</Typography>
-          { phone && <Typography size="1.1rem">{ phone }</Typography> }
-          { company && <Typography size="1.1rem">{ company }</Typography> }
-        </Box>
+      <Box direction="row" align="center">
+        { (!isPhysician || conversation) && (
+          <Box marginRight="0.25rem">
+            <Badge count={conversation ? conversation.unread : 0}>
+              <Button onClick={() => startMessaging(id)}>
+                <Box padding="1rem">
+                  <FiMessageCircle size="1.75rem" color={theme.black.light} />
+                </Box>
+              </Button>
+            </Badge>
+          </Box>
+        )}
 
-        { !isPhysician && (
-          <Box marginTop="0.1rem">
-            <OnlineIndicator status={status} />
+        { startCall && (
+          <Box>
+            <Button onClick={() => startCall(id)}>
+              <Box padding="1rem">
+                <FiVideo size="1.75rem" color={theme.black.light} />
+              </Box>
+            </Button>
           </Box>
         )}
       </Box>
-
-      { (!isPhysician || conversation) && (
-        <Box marginRight="0.25rem">
-          <Badge count={conversation ? conversation.unread : 0}>
-            <Button onClick={() => startMessaging(id)}>
-              <Box padding="1rem">
-                <FiMessageCircle size="1.75rem" color={theme.black.light} />
-              </Box>
-            </Button>
-          </Badge>
-        </Box>
-      )}
-
-      { startCall && (
-        <Box>
-          <Button onClick={() => startCall(id)}>
-            <Box padding="1rem">
-              <FiVideo size="1.75rem" color={theme.black.light} />
-            </Box>
-          </Button>
-        </Box>
-      )}
     </Wrapper>
   )
 }
@@ -97,3 +80,12 @@ User.propTypes = {
 };
 
 export default withTheme(User);
+
+const Wrapper = styled(Box)`
+  border-radius: 1.25rem;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: ${({ theme }) => theme.white};
+`;

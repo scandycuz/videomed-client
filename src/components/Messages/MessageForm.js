@@ -46,7 +46,7 @@ export function MessageForm({ onSubmit }) {
         />
 
         <Box
-          marginTop="1rem"
+          marginTop="0.75rem"
           justify="row"
           align="center"
         >

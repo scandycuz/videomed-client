@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { requestCall } from 'actions/stream';
 import {
   getMessages,
   getConversations,
@@ -22,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   getConversations: () => dispatch(getConversations()),
   readConversation: (id) => dispatch(readConversation(id)),
   createMessage: (id, params) => dispatch(createMessage(id, params)),
+  requestCall: (userId) => dispatch(requestCall(userId)),
   closeConversation: () => dispatch(receiveActiveConversation(null)),
 });
 

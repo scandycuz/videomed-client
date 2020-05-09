@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTheme } from 'styled-components';
-import { FiX } from 'react-icons/fi';
+import styled, { withTheme } from 'styled-components';
+import { FiX, FiVideo } from 'react-icons/fi';
 import PulseLoader from "react-spinners/PulseLoader";
 import Button from 'components/core/Button/Icon';
 import Box from 'components/core/Box';
-import Typography from 'components/core/Typography';
+import UserInfo from 'components/Users/User/UserInfo';
 import MessageList from './MessageList';
 import MessageForm from './MessageForm';
 
@@ -15,9 +15,11 @@ export class Messages extends Component {
     loading: PropTypes.bool,
     messages: PropTypes.array,
     conversations: PropTypes.array,
+    onlineStatus: PropTypes.object,
     currentUser: PropTypes.object,
     activeConversation: PropTypes.number,
     createMessage: PropTypes.func.isRequired,
+    requestCall: PropTypes.func.isRequired,
     getMessages: PropTypes.func.isRequired,
     readConversation: PropTypes.func.isRequired,
     closeConversation: PropTypes.func.isRequired,
@@ -38,6 +40,10 @@ export class Messages extends Component {
     }
   }
 
+  startCall = async (userId) => {
+    this.props.requestCall(userId);
+  }
+
   handleSubmit = (message) => {
     this.props.createMessage(this.props.activeConversation, message);
   }
@@ -52,9 +58,6 @@ export class Messages extends Component {
       </Box>
     );
 
-    const isPhysician = this.props.currentUser.type === 'Physician';
-    const prefix = !isPhysician ? 'Dr. ' : '';
-
     const conversation = this.props.conversations.find(({ id }) => {
       return id === this.props.activeConversation;
     });
@@ -63,42 +66,78 @@ export class Messages extends Component {
       return id !== this.props.currentUser.id;
     });
 
+    const isPhysician = participant.type === 'Physician';
+    const prefix = isPhysician ? 'Dr. ' : '';
+
     return (
-      <Box>
+      <Wrapper>
         <Box
-          direction="row"
-          justify="space-between"
-          align="center"
-          padding="1rem 1rem 0.75rem"
+          borderRadius="1.25rem"
+          padding="1.5rem"
+          background="white"
         >
-          <Typography size="1.25rem">
-            Conversation with <strong>{ prefix }{ participant.firstName } { participant.lastName }</strong>
-          </Typography>
+          <Box
+            direction="row"
+            justify="space-between"
+            align="center"
+            paddingBottom="0.75rem"
+          >
+            <UserInfo
+              status={this.props.onlineStatus[participant.id]}
+              prefix={prefix}
+              firstName={participant.firstName}
+              lastName={participant.lastName}
+              email={participant.email}
+              phone={participant.phone}
+              company={participant.company}
+              type={participant.type}
+            />
 
-          <Button onClick={this.props.closeConversation}>
-            <Box padding="1rem">
-              <FiX
-                size="1.75rem"
-                color={this.props.theme.black.light}
-              />
+            <Box
+              direction="row"
+              align="center"
+            >
+              <Box marginRight="0.25rem">
+                <Button onClick={this.props.closeConversation}>
+                  <Box padding="1rem">
+                    <FiX size="1.75rem" color={this.props.theme.black.light} />
+                  </Box>
+                </Button>
+              </Box>
+
+              { !isPhysician && (
+                <Box>
+                  <Button onClick={() => this.startCall(participant.id)}>
+                    <Box padding="1rem">
+                      <FiVideo size="1.75rem" color={this.props.theme.black.light} />
+                    </Box>
+                  </Button>
+                </Box>
+              )}
             </Box>
-          </Button>
-        </Box>
+          </Box>
 
 
-        <Box padding="0 1rem">
-          <MessageList
-            currentUser={this.props.currentUser}
-            messages={this.props.messages}
-          />
-        </Box>
+          <Box background="white">
+            <MessageList
+              currentUser={this.props.currentUser}
+              messages={this.props.messages}
+            />
+          </Box>
 
-        <Box marginTop="0.5rem" padding="1rem">
-          <MessageForm onSubmit={this.handleSubmit} />
+          <Box padding="1rem 0 0" background="white">
+            <MessageForm onSubmit={this.handleSubmit} />
+          </Box>
         </Box>
-      </Box>
+      </Wrapper>
     );
   }
 }
 
 export default withTheme(Messages);
+
+const Wrapper = styled(Box)`
+  padding: 0.725rem 0.75rem;
+  background: ${({ theme }) => theme.grey.light};
+  border-radius: 1.5rem;
+`;

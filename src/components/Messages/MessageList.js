@@ -20,7 +20,7 @@ export function MessageList({ currentUser, messages }) {
   return (
     <Box
       padding="0 0.75rem 0 0"
-      maxHeight="38vh"
+      maxHeight="34vh"
       overflowX="auto"
     >
       { messages.length ? (
