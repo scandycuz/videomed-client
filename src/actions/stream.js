@@ -4,6 +4,10 @@ import { receiveOnlineStatus } from 'actions/users';
 import { format } from 'util/methods';
 import { receiveGlobalMessage, removeGlobalMessage } from 'actions/app';
 import {
+  receiveConversation,
+  receiveMessage as receiveChatMessage,
+} from 'actions/messages';
+import {
   RECEIVE_ONLINE_STATUS,
   RECEIVE_STREAM,
   REMOVE_STREAM,
@@ -17,6 +21,8 @@ import {
   ANSWER_CALL,
   JOIN_CALL,
   EXCHANGE,
+  RECEIVE_CONVERSATION,
+  RECEIVE_MESSAGE,
 } from 'actions/types';
 
 /**
@@ -367,6 +373,12 @@ export function receiveMessage(message) {
       case RECEIVE_ONLINE_STATUS:
         console.log('receiving user online status');
         return dispatch(receiveOnlineStatus(format(message.online_status)));
+      case RECEIVE_CONVERSATION:
+        console.log('receiving conversation');
+        return dispatch(receiveConversation(format(message.conversation)));
+      case RECEIVE_MESSAGE:
+        console.log('receiving message');
+        return dispatch(receiveChatMessage(format(message.message)));
       default:
         return;
     }

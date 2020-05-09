@@ -32,6 +32,36 @@ const API = {
       headers: { Authorization: `Bearer ${token}` },
     });
   },
+
+  fetchConversations: (token) => {
+    return axios.get(`${PROTOCOL}://${API_URL}/current_user/conversations`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  findOrCreateConversation: (token, params) => {
+    return axios.post(`${PROTOCOL}://${API_URL}/current_user/conversations`, params, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  readConversation: (token, id) => {
+    return axios.patch(`${PROTOCOL}://${API_URL}/current_user/conversations/${id}/read`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  fetchMessages: (token, id) => {
+    return axios.get(`${PROTOCOL}://${API_URL}/current_user/conversations/${id}/messages`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  createMessage: (token, id, params) => {
+    return axios.post(`${PROTOCOL}://${API_URL}/current_user/conversations/${id}/messages`, params, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
 }
 
 export default API;

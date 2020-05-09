@@ -1,6 +1,10 @@
 import { connect } from 'react-redux';
 import { logout } from 'actions/session';
 import {
+  findOrCreateConversation,
+  getConversations,
+} from 'actions/messages';
+import {
   createStream,
   closeStream,
   requestCall,
@@ -10,7 +14,7 @@ import {
 } from 'actions/stream';
 import Home from 'components/Home';
 
-const mapStateToProps = ({ session, stream, users, app }) => ({
+const mapStateToProps = ({ session, stream, users, messages, app }) => ({
   currentUser: session.currentUser,
   streams: stream.streams,
   fullScreen: stream.fullScreen,
@@ -19,6 +23,8 @@ const mapStateToProps = ({ session, stream, users, app }) => ({
   from: stream.participant,
   users: users.users,
   onlineStatus: users.onlineStatus,
+  conversations: messages.conversations,
+  activeConversation: messages.active,
   error: app.error,
 });
 
@@ -30,6 +36,8 @@ const mapDispatchToProps = dispatch => ({
   acceptCall: () => dispatch(acceptCall()),
   rejectCall: () => dispatch(rejectCall()),
   setFullScreen: (status) => dispatch(setFullScreen(status)),
+  findOrCreateConversation: (userId) => dispatch(findOrCreateConversation(userId)),
+  getConversations: () => dispatch(getConversations()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

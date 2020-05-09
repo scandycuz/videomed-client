@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from 'styled-components';
-import PulseLoader from "react-spinners/PulseLoader";
 import Box from 'components/core/Box';
-import Dialog from 'components/core/Dialog';
 import Typography from 'components/core/Typography';
+import Messages from 'containers/Messages';
 import VideoRoom from 'components/VideoRoom';
 import Users from 'components/Users';
 import Code from './Code';
-import ShakingPhone from './ShakingPhone';
+import AnswerCall from './AnswerCall';
 
 export class Home extends Component {
   static propTypes = {
@@ -16,12 +15,16 @@ export class Home extends Component {
     users: PropTypes.array,
     onlineStatus: PropTypes.object,
     currentUser: PropTypes.object,
+    activeConversation: PropTypes.number,
     streams: PropTypes.object,
+    conversations: PropTypes.array,
     fullScreen: PropTypes.bool,
     loading: PropTypes.bool,
     pending: PropTypes.bool,
     from: PropTypes.number,
     setFullScreen: PropTypes.func.isRequired,
+    findOrCreateConversation: PropTypes.func.isRequired,
+    getConversations: PropTypes.func.isRequired,
     createStream: PropTypes.func.isRequired,
     closeStream: PropTypes.func.isRequired,
     requestCall: PropTypes.func.isRequired,
@@ -32,6 +35,10 @@ export class Home extends Component {
   static defaultProps = {
     loading: false,
     fullScreen: false,
+  }
+
+  componentDidMount() {
+    this.props.getConversations();
   }
 
   startCall = async (userId) => {
@@ -46,43 +53,12 @@ export class Home extends Component {
     return (
       <Box align="center">
         { this.props.pending && user && (
-          <Dialog
-            onSuccess={this.props.acceptCall}
-            onReject={this.props.rejectCall}
-          >
-            <Box
-              direction="row"
-              align="center"
-              paddingLeft="0.25rem"
-            >
-              <Box marginRight="1rem">
-                <ShakingPhone size="2rem" color={this.props.theme.black.light}/>
-              </Box>
-
-              <Typography size="1.25rem">
-                Accept call from {prefix}{user.firstName} {user.lastName}?
-              </Typography>
-            </Box>
-          </Dialog>
-        )}
-
-        { this.props.loading && (
-          <Box
-            position="absolute"
-            align="center"
-            top="0"
-            right="0"
-            bottom="0"
-            left="0"
-            zIndex="5000"
-            background="white"
-            paddingTop="10rem"
-          >
-            <PulseLoader
-              color={this.props.theme.secondary.light}
-              loading
-            />
-          </Box>
+          <AnswerCall
+            user={user}
+            prefix={prefix}
+            acceptCall={this.props.acceptCall}
+            rejectCall={this.props.rejectCall}
+          />
         )}
 
         { this.props.streams.self ? (
@@ -93,8 +69,12 @@ export class Home extends Component {
             setFullScreen={this.props.setFullScreen}
             closeStream={this.props.closeStream}
           />
+        ) : this.props.activeConversation ? (
+          <Box marginTop="2rem" width="36rem" maxWidth="100%">
+            <Messages />
+          </Box>
         ) : (
-          <Box marginTop="3.5rem" width="28rem" maxWidth="100%">
+          <Box marginTop="3.5rem" width="36rem" maxWidth="100%">
             <Box align="center" >
               <Typography
                 as="h4"
@@ -128,8 +108,11 @@ export class Home extends Component {
               ) : (
                 <Users
                   users={this.props.users}
+                  currentUser={this.props.currentUser}
                   onlineStatus={this.props.onlineStatus}
-                  onClick={ this.props.currentUser.type === 'Physician' ? this.startCall : undefined}
+                  conversations={this.props.conversations}
+                  startMessaging={this.props.findOrCreateConversation}
+                  startCall={ this.props.currentUser.type === 'Physician' ? this.startCall : undefined}
                 />
               )}
             </Box>

@@ -4,7 +4,7 @@ import { normalizeColor } from 'util/methods';
 const Box = styled.div`
   display: ${(props) => props.display || 'flex'};
   z-index: ${(props) => props.zIndex};
-  flex: ${(props) => props.flex && '1 1 auto'};
+  flex: ${(props) => typeof props.flex === 'string' ? props.flex : props.flex && '1 1 auto'};
   position: ${(props) => props.position};
   background: ${(props) =>
     props.background ? normalizeColor(props.theme, props.background) :
@@ -39,6 +39,8 @@ const Box = styled.div`
   border-radius: ${(props) => props.borderRadius};
   box-shadow: ${(props) => props.boxShadow};
   overflow: ${(props) => props.overflow};
+  overflow-x: ${(props) => props.overflowX};
+  overflow-y: ${(props) => props.overflowY};
   transition: ${(props) => props.transition};
   pointer-events: ${(props) => props.pointerEvents};
 `;

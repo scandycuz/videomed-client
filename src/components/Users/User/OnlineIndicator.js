@@ -35,5 +35,5 @@ const Indicator = styled.div`
   height: 0.925rem;
   border-radius: 50%;
   border: ${({ theme, status }) =>
-    `4px solid ${status === 'online' ? theme.ok.light : theme.critical.light}`};
+    `4px solid ${status === 'online' ? theme.ok.light : theme.disabled}`};
 `;

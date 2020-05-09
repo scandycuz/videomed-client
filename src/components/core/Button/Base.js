@@ -5,7 +5,7 @@ import { normalizeColor } from 'util/methods';
 const ButtonBase = styled.button`
   background: transparent;
   padding: 0;
-  opacity: ${({ fade, opacity }) => fade ? 0.85 : opacity ? opacity : 1};
+  opacity: ${({ fade, opacity }) => fade ? 0.8 : opacity ? opacity : 1};
   font-size: 1.25rem;
   border: none;
   outline: none;

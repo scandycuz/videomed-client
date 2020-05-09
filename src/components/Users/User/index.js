@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
-import { FiVideo } from 'react-icons/fi';
+import { FiVideo, FiMessageCircle } from 'react-icons/fi';
 import Box from 'components/core/Box';
-import Button from 'components/core/Button/Base';
+import Button from 'components/core/Button/Icon';
+import Badge from 'components/core/Badge';
 import Typography from 'components/core/Typography';
 import OnlineIndicator from './OnlineIndicator';
 import Profile from './Profile';
@@ -26,7 +27,9 @@ export function User({
   phone,
   company,
   type,
-  onClick,
+  conversation,
+  startMessaging,
+  startCall,
 }) {
   const isPhysician = type === 'Physician';
 
@@ -53,9 +56,21 @@ export function User({
         )}
       </Box>
 
-      { onClick && (
-        <Box marginRight="0.5rem">
-          <Button onClick={() => onClick(id)}>
+      {conversation && (
+        <Box marginRight="0.25rem">
+          <Badge count={conversation ? conversation.unread : 0}>
+            <Button onClick={() => startMessaging(id)}>
+              <Box padding="1rem">
+                <FiMessageCircle size="1.75rem" color={theme.black.light} />
+              </Box>
+            </Button>
+          </Badge>
+        </Box>
+      )}
+
+      { startCall && (
+        <Box>
+          <Button onClick={() => startCall(id)}>
             <Box padding="1rem">
               <FiVideo size="1.75rem" color={theme.black.light} />
             </Box>
@@ -76,7 +91,9 @@ User.propTypes = {
   phone: PropTypes.string,
   company: PropTypes.string,
   type: PropTypes.string,
-  onClick: PropTypes.func,
+  conversation: PropTypes.object,
+  startMessaging: PropTypes.func,
+  startCall: PropTypes.func,
 };
 
 export default withTheme(User);

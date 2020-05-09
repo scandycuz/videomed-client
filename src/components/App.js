@@ -3,6 +3,7 @@ import { Switch } from "react-router-dom";
 import PropTypes from 'prop-types';
 import ClipLoader from "react-spinners/ClipLoader";
 import Box from 'components/core/Box';
+import ScrollToTop from 'components/core/ScrollToTop';
 import ProtectedRoute from 'components/core/ProtectedRoute';
 import Home from 'containers/Home';
 import Login from './Login';
@@ -42,6 +43,8 @@ class App extends Component {
 				minHeight="100vh"
 				justify="space-between"
 			>
+				<ScrollToTop />
+
 				{ this.props.loading && (
 					<Box
 						position="absolute"
