@@ -78,11 +78,9 @@ export function createMessage(conversationId, message) {
   return async function(dispatch, getState) {
     const { token, currentUser } = getState().session;
 
-    const unformatted = unformat(message);
-
     try {
       dispatch(receiveMessage({
-        ...unformatted,
+        ...message,
         user: { id: currentUser.id },
         _placeholder: true,
       }));
@@ -90,7 +88,7 @@ export function createMessage(conversationId, message) {
       await API.createMessage(
         token,
         conversationId,
-        { message: unformatted },
+        { message: unformat(message) },
       );
     } catch(e) {
       console.error(e);
