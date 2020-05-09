@@ -42,6 +42,7 @@ export function MessageForm({ onSubmit }) {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           value={value}
+          autoFocus
         />
 
         <Box
