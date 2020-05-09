@@ -52,6 +52,9 @@ export class Messages extends Component {
       </Box>
     );
 
+    const isPhysician = this.props.currentUser.type === 'Physician';
+    const prefix = !isPhysician ? 'Dr. ' : '';
+
     const conversation = this.props.conversations.find(({ id }) => {
       return id === this.props.activeConversation;
     });
@@ -69,7 +72,7 @@ export class Messages extends Component {
           padding="1rem 1rem 0.75rem"
         >
           <Typography size="1.25rem">
-            Conversation with <strong>{ participant.firstName } { participant.lastName }</strong>
+            Conversation with <strong>{ prefix }{ participant.firstName } { participant.lastName }</strong>
           </Typography>
 
           <Button onClick={this.props.closeConversation}>
