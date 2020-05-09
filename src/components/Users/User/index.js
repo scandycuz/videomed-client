@@ -56,7 +56,7 @@ export function User({
         )}
       </Box>
 
-      {conversation && (
+      { (!isPhysician || conversation) && (
         <Box marginRight="0.25rem">
           <Badge count={conversation ? conversation.unread : 0}>
             <Button onClick={() => startMessaging(id)}>
