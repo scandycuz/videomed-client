@@ -5,6 +5,7 @@ import { format } from 'util/methods';
 import { receiveGlobalMessage, removeGlobalMessage } from 'actions/app';
 import {
   receiveConversation,
+  receiveActiveConversation,
   receiveMessage as receiveChatMessage,
 } from 'actions/messages';
 import {
@@ -298,6 +299,7 @@ export function closeStream() {
       }
 
       dispatch(endStream());
+      dispatch(receiveActiveConversation(null));
 
       const subscription = Cable.subscription({
         channel: 'SessionChannel',
@@ -318,15 +320,20 @@ export function closeStream() {
 }
 
 /**
- * Closes and removes the
- * stream for a user.
+ * Ends the stream and
+ * closes the connection.
  * @param {string} user identifer for the user
  */
 export function stopStream(user) {
   return function(dispatch, getState) {
     const state = getState();
-    const { streams, participant } = state.stream;
+    const { pc, streams, participant } = state.stream;
     const { currentUser } = state.session;
+
+    if (pc) pc.close();
+    for (const key in streams) {
+      PeerConnection.stopStream(streams[key]);
+    }
 
     if (streams[user]) {
       const prefix = currentUser.type === 'Patient' ? 'Dr. ' : '';
@@ -343,6 +350,8 @@ export function stopStream(user) {
       dispatch(displayGlobalMessage({ body: 'The call was declined.' }));
     }
 
+    dispatch(endStream());
+    dispatch(receiveActiveConversation(null));
     dispatch(removeStream());
     dispatch(receiveStreamLoading(false));
   }

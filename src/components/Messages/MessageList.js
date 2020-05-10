@@ -4,7 +4,7 @@ import Box from 'components/core/Box';
 import Typography from 'components/core/Typography';
 import Message from './Message';
 
-export function MessageList({ currentUser, messages }) {
+export function MessageList({ currentUser, messages, height }) {
   const end = useRef();
   const [initial, setInitial] = useState(true);
 
@@ -20,7 +20,7 @@ export function MessageList({ currentUser, messages }) {
   return (
     <Box
       padding="0 0.75rem 0 0"
-      maxHeight="34vh"
+      maxHeight={height}
       overflowX="auto"
     >
       { messages.length ? (
@@ -55,6 +55,11 @@ export function MessageList({ currentUser, messages }) {
 MessageList.propTypes = {
   currentUser: PropTypes.object.isRequired,
   messages: PropTypes.array.isRequired,
-}
+  height: PropTypes.string,
+};
+
+MessageList.defaultProps = {
+  height: '34vh',
+};
 
 export default MessageList;

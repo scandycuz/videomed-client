@@ -3,6 +3,7 @@ import { normalizeColor } from 'util/methods';
 
 const Box = styled.div`
   display: ${(props) => props.display || 'flex'};
+  visibility: ${(props) => props.visibility};
   z-index: ${(props) => props.zIndex};
   flex: ${(props) => typeof props.flex === 'string' ? props.flex : props.flex && '1 1 auto'};
   position: ${(props) => props.position};

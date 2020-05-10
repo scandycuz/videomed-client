@@ -15,6 +15,7 @@ export function AnswerCall({
 }) {
   return (
     <Dialog
+      rejectText="Decline"
       onSuccess={acceptCall}
       onReject={rejectCall}
     >

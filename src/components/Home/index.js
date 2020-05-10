@@ -18,14 +18,19 @@ export class Home extends Component {
     activeConversation: PropTypes.number,
     streams: PropTypes.object,
     conversations: PropTypes.array,
+    messages: PropTypes.array,
     fullScreen: PropTypes.bool,
     loading: PropTypes.bool,
+    messageLoading: PropTypes.bool,
     pending: PropTypes.bool,
     from: PropTypes.number,
     setFullScreen: PropTypes.func.isRequired,
     findOrCreateConversation: PropTypes.func.isRequired,
     getConversations: PropTypes.func.isRequired,
+    readConversation: PropTypes.func.isRequired,
+    closeConversation: PropTypes.func.isRequired,
     createStream: PropTypes.func.isRequired,
+    createMessage: PropTypes.func.isRequired,
     closeStream: PropTypes.func.isRequired,
     requestCall: PropTypes.func.isRequired,
     acceptCall: PropTypes.func.isRequired,
@@ -65,9 +70,19 @@ export class Home extends Component {
           <VideoRoom
             loading={this.props.loading}
             streams={this.props.streams}
+            currentUser={this.props.currentUser}
+            messages={this.props.messages}
+            conversations={this.props.conversations}
             fullScreen={this.props.fullScreen}
+            activeConversation={this.props.activeConversation}
+            participant={this.props.from}
+            messageLoading={this.props.messageLoading}
+            createMessage={this.props.createMessage}
+            startMessaging={this.props.findOrCreateConversation}
             setFullScreen={this.props.setFullScreen}
             closeStream={this.props.closeStream}
+            readConversation={this.props.readConversation}
+            closeConversation={this.props.closeConversation}
           />
         ) : this.props.activeConversation ? (
           <Box marginTop="2rem" width="36rem" maxWidth="100%">
@@ -112,7 +127,7 @@ export class Home extends Component {
                   onlineStatus={this.props.onlineStatus}
                   conversations={this.props.conversations}
                   startMessaging={this.props.findOrCreateConversation}
-                  startCall={ this.props.currentUser.type === 'Physician' ? this.startCall : undefined}
+                  startCall={this.props.currentUser.type === 'Physician' ? this.startCall : undefined}
                 />
               )}
             </Box>
