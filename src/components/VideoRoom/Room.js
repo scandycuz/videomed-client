@@ -62,7 +62,7 @@ export function Room({
       justify="center"
       width="100%"
     >
-      <Box width="20%" paddingRight="0.5rem">
+      <Box width="25%" paddingRight="0.5rem">
         <Box>
           { loading ? (
             <Box paddingTop="6rem" align="center">
@@ -84,7 +84,7 @@ export function Room({
         </Box>
       </Box>
 
-      <Box width="80%" direction="column" align="center">
+      <Box width="75%" direction="column" align="center">
         <Box
           width="100%"
           justify="center"
@@ -93,12 +93,13 @@ export function Room({
         >
           <Box
             display="flex"
-            width={alone ? '75%' : '25%'}
+            align="flex-start"
+            width={alone ? '66.66%' : '33.33%'}
             maxWidth={alone && '98vh'}
-            paddingLeft={!alone && '0.5rem'}
           >
             <Box
               width="100%"
+              maxWidth={!alone && '12rem'}
               borderRadius="5px"
               overflow="hidden"
             >
@@ -114,16 +115,17 @@ export function Room({
           <Box
             display="flex"
             visibility={streams.guest ? 'visible' : 'hidden'}
-            width={alone ? '25%' : '75%'}
+            width={alone ? '33.33%' : '66.66%'}
             maxWidth="98vh"
-            borderRadius="5px"
-            overflow="hidden"
+            padding="0 0.5rem"
           >
-            <Video
-              ref={guest}
-              playsInline
-              autoPlay
-            />
+            <Box borderRadius="5px" overflow="hidden">
+              <Video
+                ref={guest}
+                playsInline
+                autoPlay
+              />
+            </Box>
           </Box>
         </Box>
 
@@ -135,11 +137,11 @@ export function Room({
             align="center"
           >
             <Box
-              padding="0.75rem 0"
+              padding="0.75rem 0.5rem"
               direction="row"
               justify="space-between"
               align="center"
-              width="75%"
+              width="66.66%"
               maxWidth="98vh"
             >
               <Box direction="row" align="center" justify="flex-start">
@@ -184,7 +186,7 @@ export function Room({
               </Button>
             </Box>
 
-            <Box width="25%" />
+            <Box width="33.33%" />
           </Box>
         )}
       </Box>

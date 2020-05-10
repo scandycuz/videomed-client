@@ -5,7 +5,7 @@ const IconButton = styled(Base)`
   border-radius: 50%;
 
   &:hover {
-    background: ${({ theme }) => theme.grey.light};
+    background: ${({ theme, disabled }) => !disabled && theme.grey.light};
   }
 `;
 

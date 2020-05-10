@@ -1,29 +1,26 @@
 import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Transition } from 'react-transition-group';
 
 export function Fade({ duration, timeout, children, ...rest}) {
-  const defaultStyle = {
-    transition: `all ${duration}ms ease-in-out`,
-    opacity: 0,
-  }
-
-  const transitionStyles = {
+  const styles = {
     entering: { marginBottom: '-4rem', opacity: 0 },
     entered:  { marginBottom: 0, opacity: 1 },
-    exiting:  { marginBottom: 0, opacity: 1 },
+    exiting:  { marginBottom: 0, opacity: 0 },
     exited:  { marginBottom: 0, opacity: 0 },
   };
 
   return (
     <Transition timeout={timeout} {...rest}>
-      { state => (
-        <div style={{
-          ...defaultStyle,
-          ...transitionStyles[state]
-        }}>
+      { (state) => (
+        <Fading
+          duration={duration}
+          opacity={styles[state].opacity}
+          marginBottom={styles[state].marginBottom}
+        >
           { children }
-        </div>
+        </Fading>
       )}
     </Transition>
   );
@@ -37,9 +34,15 @@ Fade.propTypes = {
 };
 
 Fade.defaultProps = {
-  duration:  800,
-  timeout: 0,
+  duration:  400,
+  timeout: 400,
   height: '3.5rem',
 };
 
 export default Fade;
+
+const Fading = styled.div`
+  transition: ${({ duration }) => `all ${duration}ms ease-in-out`};
+  opacity: ${({ opacity }) => opacity || 0};
+  margin-bottom: ${({ marginBottom }) => marginBottom || 0};
+`;

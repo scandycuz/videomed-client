@@ -19,7 +19,11 @@ export function GlobalMessages({ messages }) {
       <TransitionGroup>
         { messages.map((message, i) => {
           return (
-            <Fade key={message.body}>
+            <Fade
+              key={message.body}
+              duration={400}
+              timeout={400}
+            >
               <Box marginBottom={i !== messages.length - 1 && '0.5rem'}>
                 <Message message={message.body} />
               </Box>

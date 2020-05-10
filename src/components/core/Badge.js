@@ -7,7 +7,7 @@ import Typography from 'components/core/Typography';
 const transitionStyles = {
   entering: { opacity: '0', width: '0', height: '0', },
   entered:  { opacity: '1', width: '24px', height: '24px' },
-  exiting:  { opacity: '1', width: '24px', height: '24px' },
+  exiting:  { opacity: '0', width: '0', height: '0' },
   exited:  { opacity: '0', width: '0', height: '0', },
 };
 
@@ -15,7 +15,7 @@ export function Badge({ count, children }) {
   return (
     <Wrapper>
       <Outer>
-        <Transition in={count > 0} timeout={0}>
+        <Transition in={count > 0} timeout={300}>
           { state => (
             <Count
               opacity={transitionStyles[state].opacity}

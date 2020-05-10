@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled, { withTheme } from 'styled-components';
-import { FiX, FiVideo } from 'react-icons/fi';
+import { FiX, FiVideo, FiMessageCircle } from 'react-icons/fi';
 import PulseLoader from "react-spinners/PulseLoader";
 import Button from 'components/core/Button/Icon';
 import Box from 'components/core/Box';
@@ -72,6 +72,20 @@ export class Messages extends Component {
     return (
       <Wrapper>
         <Box
+          position="absolute"
+          top="-1.5rem"
+          right="-1.5rem"
+          background="grey.light"
+          borderRadius="50%"
+        >
+          <Button onClick={this.props.closeConversation}>
+            <Box padding="1rem">
+              <FiX size="1.95rem" color={this.props.theme.black.light} />
+            </Box>
+          </Button>
+        </Box>
+
+        <Box
           borderRadius="1.25rem"
           padding="1.5rem"
           background="white"
@@ -97,10 +111,13 @@ export class Messages extends Component {
               direction="row"
               align="center"
             >
-              <Box marginRight="0.25rem">
-                <Button onClick={this.props.closeConversation}>
+              <Box>
+                <Button disabled>
                   <Box padding="1rem">
-                    <FiX size="1.75rem" color={this.props.theme.black.light} />
+                    <FiMessageCircle
+                      size="1.75rem"
+                      color={this.props.theme.disabled}
+                    />
                   </Box>
                 </Button>
               </Box>
@@ -137,6 +154,7 @@ export class Messages extends Component {
 export default withTheme(Messages);
 
 const Wrapper = styled(Box)`
+  position: relative;
   padding: 0.725rem 0.75rem;
   background: ${({ theme }) => theme.grey.light};
   border-radius: 1.5rem;

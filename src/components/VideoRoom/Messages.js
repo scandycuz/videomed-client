@@ -31,7 +31,7 @@ export function Messages({
       </Box>
 
       <MessageList
-        height="48vh"
+        height="42vh"
         currentUser={currentUser}
         messages={messages}
       />

@@ -15,7 +15,7 @@ const ButtonBase = styled.button`
 
   &:hover {
     background: transparent;
-    opacity: 1;
+    opacity: ${({ disabled }) => !disabled && 1};
   }
 `;
 
