@@ -111,16 +111,18 @@ export class Messages extends Component {
               direction="row"
               align="center"
             >
-              <Box>
-                <Button disabled>
-                  <Box padding="1rem">
-                    <FiMessageCircle
-                      size="1.75rem"
-                      color={this.props.theme.disabled}
-                    />
-                  </Box>
-                </Button>
-              </Box>
+              { !isPhysician && (
+                <Box>
+                  <Button disabled>
+                    <Box padding="1rem">
+                      <FiMessageCircle
+                        size="1.75rem"
+                        color={this.props.theme.disabled}
+                      />
+                    </Box>
+                  </Button>
+                </Box>
+              )}
 
               { !isPhysician && (
                 <Box>
