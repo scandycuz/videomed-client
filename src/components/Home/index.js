@@ -1,53 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withTheme } from 'styled-components';
 import Box from 'components/core/Box';
 import Typography from 'components/core/Typography';
 import Messages from 'containers/Messages';
-import VideoRoom from 'components/VideoRoom';
-import Users from 'components/Users';
+import VideoRoom from 'containers/VideoRoom';
+import Users from 'containers/Users';
 import Code from './Code';
 import AnswerCall from './AnswerCall';
 
 export class Home extends Component {
   static propTypes = {
-    theme: PropTypes.object.isRequired,
     users: PropTypes.array,
-    onlineStatus: PropTypes.object,
     currentUser: PropTypes.object,
     activeConversation: PropTypes.number,
     streams: PropTypes.object,
-    conversations: PropTypes.array,
-    messages: PropTypes.array,
-    fullScreen: PropTypes.bool,
-    loading: PropTypes.bool,
-    messageLoading: PropTypes.bool,
     pending: PropTypes.bool,
     from: PropTypes.number,
-    setFullScreen: PropTypes.func.isRequired,
-    findOrCreateConversation: PropTypes.func.isRequired,
     getConversations: PropTypes.func.isRequired,
-    readConversation: PropTypes.func.isRequired,
-    closeConversation: PropTypes.func.isRequired,
-    createStream: PropTypes.func.isRequired,
-    createMessage: PropTypes.func.isRequired,
-    closeStream: PropTypes.func.isRequired,
-    requestCall: PropTypes.func.isRequired,
     acceptCall: PropTypes.func.isRequired,
     rejectCall: PropTypes.func.isRequired,
   };
 
-  static defaultProps = {
-    loading: false,
-    fullScreen: false,
-  }
-
   componentDidMount() {
     this.props.getConversations();
-  }
-
-  startCall = async (userId) => {
-    this.props.requestCall(userId);
   }
 
   render() {
@@ -67,23 +42,7 @@ export class Home extends Component {
         )}
 
         { this.props.streams.self ? (
-          <VideoRoom
-            loading={this.props.loading}
-            streams={this.props.streams}
-            currentUser={this.props.currentUser}
-            messages={this.props.messages}
-            conversations={this.props.conversations}
-            fullScreen={this.props.fullScreen}
-            activeConversation={this.props.activeConversation}
-            participant={this.props.from}
-            messageLoading={this.props.messageLoading}
-            createMessage={this.props.createMessage}
-            startMessaging={this.props.findOrCreateConversation}
-            setFullScreen={this.props.setFullScreen}
-            closeStream={this.props.closeStream}
-            readConversation={this.props.readConversation}
-            closeConversation={this.props.closeConversation}
-          />
+          <VideoRoom />
         ) : this.props.activeConversation ? (
           <Box marginTop="2rem" width="36rem" maxWidth="100%">
             <Messages />
@@ -117,18 +76,12 @@ export class Home extends Component {
                     color="black.light"
                     align="center"
                   >
-                    No patients with user accounts found.
+                    No patients with user accounts found. Patients must create
+                    an account using the Physician Identifier below.
                   </Typography>
                 </Box>
               ) : (
-                <Users
-                  users={this.props.users}
-                  currentUser={this.props.currentUser}
-                  onlineStatus={this.props.onlineStatus}
-                  conversations={this.props.conversations}
-                  startMessaging={this.props.findOrCreateConversation}
-                  startCall={this.props.currentUser.type === 'Physician' ? this.startCall : undefined}
-                />
+                <Users />
               )}
             </Box>
 
@@ -149,4 +102,4 @@ export class Home extends Component {
   }
 }
 
-export default withTheme(Home);
+export default Home;

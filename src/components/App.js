@@ -14,7 +14,6 @@ import GlobalMessages from './GlobalMessages';
 
 class App extends Component {
 	static propTypes = {
-		token: PropTypes.string,
 		loggedIn: PropTypes.bool,
 		currentUser: PropTypes.object,
 		messages: PropTypes.array,
@@ -109,13 +108,11 @@ class App extends Component {
 					</Switch>
 				</Box>
 
+				<GlobalMessages messages={this.props.messages} />
+
 				<Footer
 					loggedIn={this.props.loggedIn}
 					email="support@videomed.app"
-				/>
-
-				<GlobalMessages
-					messages={this.props.messages}
 				/>
 			</Box>
 		);

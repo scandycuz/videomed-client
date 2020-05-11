@@ -10,7 +10,7 @@ export function Users({
   conversations,
   onlineStatus,
   startMessaging,
-  startCall,
+  requestCall,
 }) {
   return (
     <Wrapper>
@@ -32,7 +32,7 @@ export function Users({
                 status={onlineStatus[user.id]}
                 conversation={conversation}
                 startMessaging={startMessaging}
-                startCall={startCall}
+                startCall={currentUser.type === 'Physician' ? requestCall : undefined}
                 {...user}
               />
             </Box>
@@ -49,7 +49,7 @@ Users.propTypes = {
   currentUser: PropTypes.object.isRequired,
   onlineStatus: PropTypes.object.isRequired,
   startMessaging: PropTypes.func,
-  startCall: PropTypes.func,
+  requestCall: PropTypes.func,
 }
 
 export default Users;

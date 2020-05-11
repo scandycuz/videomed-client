@@ -9,11 +9,12 @@ export function GlobalMessages({ messages }) {
   return (
     <Box
       position="fixed"
+      marginBottom="2rem"
       justify="center"
       align="center"
       left="0"
       right="0"
-      bottom="1.25rem"
+      bottom="0"
       pointerEvents="none"
     >
       <TransitionGroup>

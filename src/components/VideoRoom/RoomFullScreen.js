@@ -21,7 +21,7 @@ export function RoomFullScreen({ theme, streams, setFullScreen, closeStream }) {
     if (streams.guest) {
       PeerConnection.attachStream(guest.current, streams.guest);
     }
-  });
+  }, [streams]);
 
   function toggleFullScreen() {
     setFullScreen(false);

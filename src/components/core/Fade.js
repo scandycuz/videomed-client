@@ -5,7 +5,7 @@ import { Transition } from 'react-transition-group';
 
 export function Fade({ duration, timeout, children, ...rest}) {
   const styles = {
-    entering: { marginBottom: '-4rem', opacity: 0 },
+    entering: { marginBottom: '-2.5rem', opacity: 0 },
     entered:  { marginBottom: 0, opacity: 1 },
     exiting:  { marginBottom: 0, opacity: 0 },
     exited:  { marginBottom: 0, opacity: 0 },
