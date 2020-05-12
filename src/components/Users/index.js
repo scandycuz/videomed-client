@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import Box from 'components/core/Box';
-import User from './User';
+import Typography from 'components/core/Typography';
+import UserList from './UserList';
+import Code from './Code';
 
 export function Users({
   users,
@@ -13,33 +14,61 @@ export function Users({
   requestCall,
 }) {
   return (
-    <Wrapper>
-      <Box>
-        { users.map((user, idx) => {
-          const conversation = conversations.find(({ participants }) => {
-            const ids = participants.map(({ id }) => id);
-            const others = ids.filter((id) => id !== currentUser.id);
-
-            return others.includes(user.id);
-          });
-
-          return (
-            <Box
-              key={user.email}
-              marginBottom={idx === users.length - 1 ? 0 : '0.75rem'}
-            >
-              <User
-                status={onlineStatus[user.id]}
-                conversation={conversation}
-                startMessaging={startMessaging}
-                startCall={currentUser.type === 'Physician' ? requestCall : undefined}
-                {...user}
-              />
-            </Box>
-          );
-        })}
+    <Box>
+      <Box align="center" >
+        <Typography
+          as="h4"
+          size="1.45rem"
+          align="center"
+          color="black.light"
+        >
+          { currentUser.type === 'Patient' ? (
+            'Your Physician:'
+          ) : (
+            'Your Patients:'
+          )}
+        </Typography>
       </Box>
-    </Wrapper>
+
+      <Box margin="1rem 0" minHeight="8.5rem">
+        { !users.length ? (
+          <Box
+            padding="1.75rem"
+            borderRadius="1rem"
+            background="grey.light"
+          >
+            <Typography
+              size="1.1rem"
+              color="black.light"
+              align="center"
+            >
+              No patients with user accounts found. Patients must create
+              an account using the Physician Identifier below.
+            </Typography>
+          </Box>
+        ) : (
+          <UserList
+            users={users}
+            currentUser={currentUser}
+            conversations={conversations}
+            onlineStatus={onlineStatus}
+            startMessaging={startMessaging}
+            requestCall={requestCall}
+          />
+        )}
+      </Box>
+
+      <Box marginTop="1rem" align="center">
+        { currentUser.type === 'Physician' ? (
+          <Code code={currentUser.code} />
+        ) : (
+          <Typography align="center" color="black.light" size="1.25rem">
+            Make an appointment with your physician as you normally would,
+            and they will reach out at the scheduled time.
+          </Typography>
+        )}
+      </Box>
+    </Box>
   );
 }
 
@@ -53,10 +82,3 @@ Users.propTypes = {
 }
 
 export default Users;
-
-const Wrapper = styled(Box)`
-  padding: 0.725rem 0.75rem;
-  background: ${({ theme }) => theme.grey.light};
-  border-radius: 1.5rem;
-  height: 100%;
-`;
